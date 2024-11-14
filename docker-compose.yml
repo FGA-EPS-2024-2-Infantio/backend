@@ -3,10 +3,12 @@ services:
   api_gateway:
     build: ./http-api-gateway
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./http-api-gateway/src:/usr/src/app/src
     command: yarn start:dev
+    env_file:
+      - .env
     environment:
       - PORT=3000
 
