@@ -49,16 +49,12 @@ Entre na pasta de cada microserviço e instale os pacotes:
     # API Gateway HTTP 
     cd ../http-api-gateway/ 
     yarn
-    
-    
-## Dependências
-Sempre que precisar adicionar um novo pacote, instale-o na sua máquina e, para que as mudanças sejam refletidas, execute o container novamente sem a flag `--build`.
 
 ## Executando o Docker
 
 Retorne à pasta raiz do projeto e execute o comando abaixo para construir as imagens necessárias:
 
-    docker-compose up --build
+`docker-compose up --build`
 
 Após a execução desse comando, o backend estará em operação.
 
@@ -66,7 +62,7 @@ Após a execução desse comando, o backend estará em operação.
 
 Para verificar se o serviço de usuários está funcionando, faça uma chamada `POST` para:
 
--   **URL**: `http://localhost:3000/users`
+-   **URL**: `http://localhost:3002/users`
     
 -   **Body (JSON)**:
 
@@ -82,7 +78,7 @@ Para verificar se o serviço de usuários está funcionando, faça uma chamada `
 
 Acesse o Prisma Studio:
 
-    docker exec -it backend_users_microservice_1 sh yarn prisma studio
+`yarn docker:studio`
 
 No navegador, acesse `http://localhost:5555` para visualizar o Prisma Studio e conferir a criação do usuário na tabela `users`.
 
@@ -90,7 +86,7 @@ No navegador, acesse `http://localhost:5555` para visualizar o Prisma Studio e c
 
 Para verificar se o serviço de aplicação está funcionando, faça uma chamada `POST` para:
 
--   **URL**: `http://localhost:3000/students`
+-   **URL**: `http://localhost:3002/students`
 -   **Body (JSON)**:
 
  `{ "name": "Lucas Frazão", "monthlyPaymentValue": 100 }`
@@ -99,6 +95,6 @@ Para confirmar a criação do estudante no banco de dados:
 
 1.  Acesse o Prisma Studio:
 
-`docker exec -it backend_application_microservice_1 sh yarn prisma studio`
+`yarn docker:studio`
 
 No navegador, acesse `http://localhost:5556` para visualizar o Prisma Studio e conferir a criação do estudante na tabela `student`.

@@ -3,14 +3,14 @@ services:
   api_gateway:
     build: ./http-api-gateway
     ports:
-      - "3001:3000"
+      - "3002:3002"
     volumes:
       - ./http-api-gateway/src:/usr/src/app/src
     command: yarn start:dev
     env_file:
       - .env
     environment:
-      - PORT=3000
+      - PORT=3002
 
   users_microservice:
     build: ./users-microservice
@@ -22,17 +22,21 @@ services:
     command: yarn start:dev
     depends_on:
       - postgres_db_users
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres_db_application:5432/application_db
 
   application_microservice:
     build: ./application-microservice
     ports:
-      - "5556:5555"
+      - "5556:5556"
     volumes:
       - ./application-microservice/src:/usr/src/app/src
       - ./application-microservice/prisma:/usr/src/app/prisma
     command: "yarn start:dev"
     depends_on:
       - postgres_db_application
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres_db_users:5432/application_db
 
   nats:
     image: nats

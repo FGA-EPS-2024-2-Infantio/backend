@@ -3,4 +3,5 @@ export class SchoolResponseDto {
   name: string;
   directorEmail: string;
   numberStudents: number;
+  disabled: boolean;
 }
