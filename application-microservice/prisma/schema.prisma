@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,6 +5,38 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Student {
+  id                 String        @id @default(cuid())
+  name               String
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  categorie          CategorieType
+  class              ClassType
+  disabled           Boolean       @default(false)
+  disabledAt         DateTime?
+  turn               TurnType
+  cep                String?
+  dataNascimento     DateTime?
+  endereco           String?
+  mae                Json?
+  naturalidadeAluno  String?
+  observacoes        Json?
+  observacoesMedicas Json?
+  pai                Json?
+  responsaveis       Json?
+}
+
+model School {
+  id             String    @id @default(cuid())
+  name           String
+  directorEmail  String
+  numberStudents Int
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  disabled       Boolean   @default(false)
+  disabledAt     DateTime?
 }
 
 enum CategorieType {
@@ -28,27 +54,4 @@ enum ClassType {
 enum TurnType {
   MATUTINO
   VESPERTINO
-}
-
-model Student {
-  id                  String @id @default(cuid())
-  name                String
-  categorie           CategorieType
-  class               ClassType
-  turn                TurnType
-  disabled            Boolean   @default(false)
-  disabledAt          DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-}
-
-model School {
-  id             String    @id @default(cuid())
-  name           String
-  directorEmail  String
-  numberStudents Int
-  disabled       Boolean   @default(false)
-  disabledAt     DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
 }

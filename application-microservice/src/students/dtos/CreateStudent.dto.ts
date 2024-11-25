@@ -2,11 +2,11 @@ import { CategorieType, ClassType, TurnType } from '@prisma/client';
 
 export class CreateStudentDto {
   name: string;
-  categorie: CategorieType;
-  class: ClassType;
-  turn: TurnType;
+  categorie: CategorieType; // Use a enumeração correta do Prisma
+  class: ClassType; // Use a enumeração correta do Prisma
+  turn: TurnType; // Use a enumeração correta do Prisma
 
-  dataNascimento?: string;
+  dataNascimento?: Date;
   naturalidadeAluno?: string;
   endereco?: string;
   cep?: string;
@@ -37,4 +37,17 @@ export class CreateStudentDto {
     titulo: string;
     descricao: string;
   }>;
+
+  observacoesMedicas?: {
+    hospital?: string;
+    telefoneHospital?: string;
+    medico?: string;
+    telefoneMedico?: string;
+    enderecoHospital?: string;
+    possuiConvenio?: boolean;
+    alergias?: string;
+    medicamentosFebre?: string;
+    medicamentosVomito?: string;
+    observacoesGerais?: string;
+  };
 }
