@@ -22,9 +22,13 @@ export class StudentsController {
   }
 
   @Patch(':studentId')
-  async updateStudent(@Param('studentId') studentId: string, @Body() updateStudentDto: CreateStudentDto) {
-    return await this.natsClient.send('updateStudent', { data: updateStudentDto, studentId: studentId });
-  }
+  async updateStudent(
+    @Param('studentId') studentId: string,
+    @Body() updateStudentDto: CreateStudentDto,
+  ) {
+  return await this.natsClient.send('updateStudent', { data: updateStudentDto, studentId });
+}
+
 
   @Delete(':studentId')
   async disableStudent(@Param('studentId') studentId: string) {
