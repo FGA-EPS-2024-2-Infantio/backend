@@ -4,11 +4,11 @@ import { CategorieType, ClassType, TurnType } from './Enums.dto';
 
 class ParentDataDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   nome: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   telefone: string;
 
   @IsString()
@@ -26,25 +26,25 @@ class ParentDataDto {
 
 class ResponsavelDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   nome: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   parentesco: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   telefone: string;
 }
 
 class ObservacaoDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   titulo: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   descricao: string;
 }
 
