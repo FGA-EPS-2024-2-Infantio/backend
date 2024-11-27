@@ -12,17 +12,26 @@ export class StudentsPrismaService {
   }
 
   async findAll(): Promise<StudentResponseDto[]> {
-    return await this.prisma.student.findMany({
+    const students = await this.prisma.student.findMany({
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
       orderBy: [
         {
           name: 'asc',
         },
       ],
     });
+    return students;
   }
 
   async get(studentId: string): Promise<StudentResponseDto> {
     return await this.prisma.student.findUnique({
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
       where: {
         id: studentId,
       },
@@ -34,6 +43,10 @@ export class StudentsPrismaService {
     studentId: string;
   }): Promise<StudentResponseDto> {
     return await this.prisma.student.update({
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
       where: {
         id: input.studentId,
       },
@@ -43,6 +56,10 @@ export class StudentsPrismaService {
 
   async disable(studentId: string): Promise<StudentResponseDto> {
     return await this.prisma.student.update({
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
       where: {
         id: studentId,
       },

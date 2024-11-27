@@ -5,9 +5,10 @@ import { SchoolModule } from './schools/school.module';
 import { StudentModule } from './students/student.module';
 import { TeacherModule } from './teachers/teacher.module';
 import { UsersModule } from './users/users.module';
+import { MonthlyPaymentModule } from './monthlyPayment/monthlyPayment.module';
 
 @Module({
-  imports: [NatsClientModule, UsersModule, StudentModule, SchoolModule, TeacherModule, ClassModule],
+  imports: [NatsClientModule, UsersModule, StudentModule, SchoolModule, TeacherModule, ClassModule, MonthlyPaymentModule],
   controllers: [],
   providers: [],
 })
