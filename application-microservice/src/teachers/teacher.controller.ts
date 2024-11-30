@@ -97,4 +97,14 @@ export class TeacherMicroserviceController {
       throw error
     }
   }
+
+  @MessagePattern('getTeacherClasses')
+  async getTeacherClasses(@Payload() teacherId: string) {
+    try {
+      const classes = await this.teachersService.findClassesByTeacher(teacherId);
+      return classes;
+    } catch (error) {
+      throw new Error(`Failed to fetch classes for teacher ${teacherId}: ${error.message}`);
+    }
+  }
 }

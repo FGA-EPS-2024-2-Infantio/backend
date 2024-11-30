@@ -27,4 +27,9 @@ export class TeachersService {
   async update(input: { data: CreateTeacherDto; teacherId: string }) {
     return await this.teachersPrismaService.update(input);
   }
+
+  async findClassesByTeacher(teacherId: string) {
+    console.log(`Recebido teacherId: ${teacherId}`);
+    return await this.teachersPrismaService.findClassesByTeacher(teacherId);
+  }
 }
