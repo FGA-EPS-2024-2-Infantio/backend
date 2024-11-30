@@ -3,5 +3,6 @@ export class CreateTeacherDto {
     numberOfClasses: number;
     cpf: string;
     startDate: Date;
+    schoolId: string;
   }
   

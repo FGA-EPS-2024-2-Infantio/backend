@@ -5,4 +5,5 @@ export class CreateStudentDto {
   categorie: CategorieType;
   class: ClassType;
   turn: TurnType;
+  schoolId: string;
 }

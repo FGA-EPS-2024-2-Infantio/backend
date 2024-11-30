@@ -4,4 +4,12 @@ export class TeacherResponseDto {
   numberOfClasses: number;
   cpf: string;
   startDate: Date;
+  school?: {
+    id: string;
+    name: string;
+  };
+  classes?: {
+    id: string;
+    name: string;
+  }[];
 }

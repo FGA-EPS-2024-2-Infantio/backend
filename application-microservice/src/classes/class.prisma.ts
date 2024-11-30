@@ -1,6 +1,6 @@
 // src/modules/schools/prisma/schools.prisma.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../database/prisma.service';
 import { ClassResponseDto } from './dtos/ClassResponse.dto';
 import { CreateClassDto } from './dtos/CreateClass.dto';
 
@@ -9,12 +9,17 @@ export class ClassesPrismaService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateClassDto): Promise<ClassResponseDto> {
-    const { name, teacherId } = data;
+    const { name, teacherId, schoolId } = data;
 
     const newClass = await this.prisma.class.create({
       data: {
         name,
-        teacherId,
+        teacher: {
+          connect: { id: teacherId },
+        },
+        school: {
+          connect: { id: schoolId },
+        },
         disabled: false,
       },
       include: {
@@ -157,7 +162,12 @@ export class ClassesPrismaService {
       },
       data: {
         name: data.name,
-        teacherId: data.teacherId,
+        teacher: {
+          connect: { id: data.teacherId },
+        },
+        school: {
+          connect: { id: data.schoolId }, // Inclui school no update
+        },
         disabled: data.disabled ?? undefined,
       },
       include: {

@@ -9,6 +9,10 @@ export class ClassResponseDto {
     id: string;
     name: string;
   }[];
+  school?: {
+    id: string;
+    name: string;
+  };
   disabled: boolean;
   disabledAt?: Date;
   createdAt: Date;
