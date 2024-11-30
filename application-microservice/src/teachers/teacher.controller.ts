@@ -21,6 +21,9 @@ export class TeacherMicroserviceController {
           numberOfClasses: createTeacherDto.numberOfClasses,
           cpf: createTeacherDto.cpf,
           startDate: new Date(createTeacherDto.startDate),
+          school: {
+            connect: { id: createTeacherDto.schoolId },
+          },
         },
       });
 
