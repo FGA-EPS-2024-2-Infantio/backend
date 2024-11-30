@@ -22,6 +22,8 @@ services:
       - postgres_db_users
     environment:
       - DATABASE_URL=postgresql://postgres:password@postgres_db_application:5432/application_db
+      - JWT_SECRET_KEY=/IrIJwMiClFMzmKvt8y4s1aLu81i9hnEWBbavxczhOHckwvzGwSTYbIRNNoShUX1nvZd5mfIrQNqFNzr/NemOA==
+      - JWT_REFRESH_TOKEN=gc5rjE/tBdFdtnoBKbvA2PZcJzUwCtvcdXcYJzhFc7kszZK1rYhZagX1qOcwQvUbuZ7ahcQC9c+uzexNoKKAsg==
 
   application_microservice:
     build: ./application-microservice
