@@ -37,9 +37,4 @@ export class StudentMicroserviceController {
   async disable(@Payload() studentId: string) {
     return await this.studentService.disable(studentId);
   }
-
-  @MessagePattern('getStudentData')
-  async getStudentData(@Payload() studentId: string) {
-    return await this.studentService.findStudentById(studentId);
-  }
 }

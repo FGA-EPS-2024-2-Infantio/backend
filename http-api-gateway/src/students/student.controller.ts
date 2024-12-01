@@ -22,13 +22,6 @@ export class StudentsController {
     return await this.natsClient.send('getStudent', studentId);
   }
 
-  @Get(':studentId')
-  async getStudentData(@Param('studentId') studentId: string) {
-    return await lastValueFrom(
-      this.natsClient.send('getStudentData', studentId),
-    );
-  }
-
   @Patch(':studentId')
   async updateStudent(@Param('studentId') studentId: string, @Body() updateStudentDto: CreateStudentDto) {
     return await this.natsClient.send('updateStudent', { data: updateStudentDto, studentId: studentId });
