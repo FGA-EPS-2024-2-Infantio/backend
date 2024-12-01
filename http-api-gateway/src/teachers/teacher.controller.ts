@@ -40,9 +40,9 @@ export class TeacherController {
 
   @Delete(':teacherId')
   @HttpCode(200)
-  async deleteTeacher(@Param('teacherId') teacherId: string) {
+  async disableTeacher(@Param('teacherId') teacherId: string) {
       try {
-        const response =  await lastValueFrom(this.natsClient.send('deleteTeacher', teacherId));
+        const response = this.natsClient.emit('disableTeacher', { teacherId: teacherId });
         return response
       } catch (error) {
         throw error
@@ -52,7 +52,7 @@ export class TeacherController {
   @Patch(':teacherId')
   async updateTeacher(@Param('teacherId') teacherId: string, @Body() updateTeacherDto: CreateTeacherDto) {
     try {
-      const response = await this.natsClient.emit('updateTeacher', { data: updateTeacherDto, teacherId: teacherId });
+      const response = this.natsClient.emit('updateTeacher', { data: updateTeacherDto, teacherId: teacherId });
       return response;
     } catch (error) {
       throw error;

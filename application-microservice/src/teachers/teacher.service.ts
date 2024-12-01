@@ -20,8 +20,8 @@ export class TeachersService {
     return await this.teachersPrismaService.get(teacherId);
   }
 
-  async delete(teacherId: string): Promise<void> {
-    await this.teachersPrismaService.delete(teacherId);
+  async disable(input: {teacherId: string}): Promise<void> {
+    await this.teachersPrismaService.disable(input);
   }
 
   async update(input: { data: CreateTeacherDto; teacherId: string }) {

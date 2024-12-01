@@ -34,10 +34,7 @@ export class StudentsService {
     return student;
   }
 
-  async update(input: {
-    data: CreateStudentDto;
-    studentId: string;
-  }) {
+  async update(input: { data: CreateStudentDto; studentId: string }) {
     const student = await this.studentsPrismaService.update(input);
 
     return {

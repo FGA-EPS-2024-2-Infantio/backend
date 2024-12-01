@@ -8,7 +8,7 @@ import { TeacherResponseDto } from './dtos/TeacherResponse.dto';
 export class TeachersPrismaService {
   constructor(private prisma: PrismaService) {}
 
-  async createTeacher(data:CreateTeacherDto) {
+  async createTeacher(data: CreateTeacherDto) {
     return await this.prisma.teacher.create({ data });
   }
 
@@ -24,11 +24,13 @@ export class TeachersPrismaService {
     });
   }
 
-  async delete(teacherId: string): Promise<void> {
-    await this.prisma.teacher.delete({
-      where: {
-        id: teacherId,
-      },
+  async disable(input: {teacherId: string}): Promise<void> {
+    await this.prisma.teacher.update({
+      where: {id: input.teacherId},
+      data: {
+        disabledAt: new Date(),
+        disabled: true,
+      }
     });
   }
 
@@ -43,5 +45,4 @@ export class TeachersPrismaService {
       data: input.data,
     });
   }
-
 }
