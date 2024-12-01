@@ -24,8 +24,9 @@ model Class {
   teacherId String
   teacher   Teacher @relation(fields: [teacherId], references: [id])
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  attendance Attendance[]
 }
 
 enum CategorieType {
@@ -56,6 +57,21 @@ model Student {
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
   classes    Class[]
+  attendance Attendance[]
+}
+
+model Attendance {
+  id          String   @id @default(cuid())
+  studentId   String   @map("student_id")
+  classId     String   @map("class_id")
+  date        DateTime
+  hasAttended Boolean  @map("has_attended")
+
+  class   Class   @relation(fields: [classId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, date, classId])
+  @@map("attendance")
 }
 
 model School {
@@ -72,12 +88,16 @@ model School {
 model Teacher {
   id              String   @id @default(cuid())
   name            String
-  numberOfClasses Int
+  numberOfClasses Int      @default(0) @map("number_of_classes")
   cpf             String   @unique @db.VarChar(14)
   startDate       DateTime @map("start_date")
-  classes         Class[]
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  disabled        Boolean  @default(false)
+
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  disabledAt DateTime? @map("disabled_at")
+
+  classes Class[]
 
   @@map("teacher")
 }
