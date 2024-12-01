@@ -3,11 +3,12 @@ import { CategorieType, ClassType, TurnType } from '@prisma/client';
 export class StudentResponseDto {
   id: string;
   name: string;
+  isFilled: boolean;
   categorie: CategorieType;
   class: ClassType;
   turn: TurnType;
   
-  dataNascimento?: Date;
+  dataNascimento?: string;
   naturalidadeAluno?: string;
   endereco?: string;
   cep?: string;

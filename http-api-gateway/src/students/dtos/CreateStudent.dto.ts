@@ -107,7 +107,8 @@ export class CreateStudentDto {
   turn: TurnType;
 
   @IsOptional()
-  dataNascimento?: Date;
+  @IsString()
+  dataNascimento?: string;
 
   @IsString()
   @IsOptional()

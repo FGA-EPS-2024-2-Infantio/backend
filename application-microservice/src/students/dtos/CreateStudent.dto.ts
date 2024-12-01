@@ -2,11 +2,12 @@ import { CategorieType, ClassType, TurnType } from '@prisma/client';
 
 export class CreateStudentDto {
   name: string;
+  isFilled?: boolean;
   categorie: CategorieType; // Use a enumeração correta do Prisma
   class: ClassType; // Use a enumeração correta do Prisma
   turn: TurnType; // Use a enumeração correta do Prisma
 
-  dataNascimento?: Date;
+  dataNascimento?: string;
   naturalidadeAluno?: string;
   endereco?: string;
   cep?: string;

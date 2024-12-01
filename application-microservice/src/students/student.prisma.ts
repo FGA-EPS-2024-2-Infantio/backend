@@ -27,6 +27,7 @@ export class StudentsPrismaService {
     return {
       id: student.id,
       name: student.name,
+      isFilled: student.isFilled,
       categorie: student.categorie,
       class: student.class,
       turn: student.turn,
@@ -73,6 +74,7 @@ export class StudentsPrismaService {
       where: { id: studentId },
       data: {
         name: data.name,
+        isFilled: data.isFilled,
         categorie: data.categorie,
         class: data.class,
         turn: data.turn,
