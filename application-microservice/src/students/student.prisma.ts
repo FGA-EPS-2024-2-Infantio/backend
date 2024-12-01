@@ -52,4 +52,11 @@ export class StudentsPrismaService {
       },
     });
   }
+
+  async findStudentById(studentId: string) {
+    return await this.prisma.student.findUnique({
+      where: { id: studentId },
+      include: { classes: true, school: true },
+    });
+  }
 }

@@ -54,4 +54,8 @@ export class StudentsService {
       data: student,
     };
   }
+
+  async findStudentById(studentId: string) {
+    return await this.studentsPrismaService.findStudentById(studentId);
+  }
 }

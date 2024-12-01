@@ -230,4 +230,14 @@ export class ClassesPrismaService {
       updatedAt: updatedClass.updatedAt,
     };
   }
+
+  async findStudentsByClass(classId: string) {
+    return await this.prisma.student.findMany({
+      where: {
+        classes: {
+          some: { id: classId },
+        },
+      },
+    });
+  }
 }

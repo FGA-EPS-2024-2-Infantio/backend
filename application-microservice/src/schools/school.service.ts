@@ -27,4 +27,16 @@ export class SchoolsService {
   async update(input: { data: CreateSchoolDto; schoolId: string }) {
     return await this.schoolsPrismaService.update(input);
   }
+
+  async findClassesBySchool(schoolId: string) {
+    return await this.schoolsPrismaService.findClassesBySchool(schoolId);
+  }
+
+  async findStudentsBySchool(schoolId: string) {
+    return await this.schoolsPrismaService.findStudentsBySchool(schoolId);
+  }
+
+  async findTeachersBySchool(schoolId: string) {
+    return await this.schoolsPrismaService.findTeachersBySchool(schoolId);
+  }
 }
