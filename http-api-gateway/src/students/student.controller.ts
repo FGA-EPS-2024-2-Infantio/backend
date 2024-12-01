@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateStudentDto } from './dtos/CreateStudent.dto';
+import { lastValueFrom } from 'rxjs';
 
 @Controller('students')
 export class StudentsController {
