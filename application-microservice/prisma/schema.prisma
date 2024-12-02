@@ -70,7 +70,6 @@ model Attendance {
   class   Class   @relation(fields: [classId], references: [id])
   student Student @relation(fields: [studentId], references: [id])
 
-  @@unique([studentId, date, classId])
   @@map("attendance")
 }
 

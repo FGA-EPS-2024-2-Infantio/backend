@@ -18,15 +18,10 @@ export class AttendanceMicroserviceController {
     private readonly attendanceService: AttendanceService,
   ) {}
   @MessagePattern('createAttendance')
-  async createAttendance(@Payload() createAttendanceDto: CreateAttendanceDto) {
+  async createAttendance(@Payload() createAttendanceDto: CreateAttendanceDto[]) {
     try {
-      const attendance = await this.prisma.attendance.create({
-        data: {
-          classId: createAttendanceDto.classId,
-          hasAttended: createAttendanceDto.hasAttended,
-          studentId: createAttendanceDto.studentId,
-          date: new Date(createAttendanceDto.date),
-        },
+      const attendance = await this.prisma.attendance.createMany({
+        data: createAttendanceDto
       });
 
       return {

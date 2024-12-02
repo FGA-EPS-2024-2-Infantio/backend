@@ -7,7 +7,7 @@ import { CreateAttendanceDto } from './dtos/CreateAttendance.dto';
 export class AttendanceController {
   constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) { }
   @Post()
-  async createAttendance(@Body() createAttendanceDto: CreateAttendanceDto) {
+  async createAttendance(@Body() createAttendanceDto: CreateAttendanceDto[]) {
     try {
       const response = await lastValueFrom(
         this.natsClient.send('createAttendance', createAttendanceDto)
