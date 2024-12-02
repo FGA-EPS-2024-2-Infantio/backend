@@ -22,19 +22,57 @@ export class StudentMicroserviceController {
   }
 
   @MessagePattern('getStudent')
-  async get(studentId: string): Promise<StudentResponseDto> {
-    return await this.studentService.get(studentId);
+  async get(studentId: string) {
+    try {
+      return await this.studentService.get(studentId);
+    } catch (error) {
+      if (error.code === 'P2025') {
+        return {
+          statusCode: 404,
+          message: 'Student not found',
+        };
+      }
+      throw error;
+    }
   }
 
   @MessagePattern('updateStudent')
-  async update(
-    @Payload() input: { data: CreateStudentDto; studentId: string },
-  ) {
-    return await this.studentService.update(input);
+  async update(@Payload() input: { data: CreateStudentDto; studentId: string }) {
+    try {
+      const response = await this.studentService.update(input);
+      return {
+        statusCode: 200,
+        message: 'Student updated successfully',
+        data: response,
+      };
+    } catch (error) {
+      if (error.code === 'P2025') {
+        return {
+          statusCode: 404,
+          message: 'Student not found',
+        };
+      }
+      throw error;
+    }
   }
 
   @MessagePattern('disableStudent')
   async disable(@Payload() studentId: string) {
-    return await this.studentService.disable(studentId);
+    try {
+      const response = await this.studentService.disable(studentId);
+      return {
+        statusCode: 200,
+        message: 'Student deleted successfully',
+        data: response,
+      };
+    } catch (error) {
+      if (error.code === 'P2025') {
+        return {
+          statusCode: 404,
+          message: 'Student not found',
+        };
+      }
+      throw error;
+    }
   }
 }
