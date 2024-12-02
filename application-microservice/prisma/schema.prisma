@@ -64,7 +64,7 @@ model Attendance {
   id          String   @id @default(cuid())
   studentId   String   @map("student_id")
   classId     String   @map("class_id")
-  date        DateTime
+  date        DateTime @db.Date
   hasAttended Boolean  @map("has_attended")
 
   class   Class   @relation(fields: [classId], references: [id])

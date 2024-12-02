@@ -42,6 +42,21 @@ export class AttendancePrismaService {
     });
   }
 
+  async findAttendanceByDate(date: Date): Promise<AttendanceResponseDto[]> {
+    return await this.prisma.attendance.findMany({
+        where: {
+            date: date,
+        }, 
+        select: {
+            studentId: true, 
+            student: true,
+            date: true,
+            classId: true,
+            hasAttended: true,
+        }
+    });
+  }
+
   async getById(attendanceId: string): Promise<AttendanceResponseDto> {
     return await this.prisma.attendance.findUnique({
       where: {

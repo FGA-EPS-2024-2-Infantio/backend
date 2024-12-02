@@ -54,6 +54,16 @@ export class AttendanceMicroserviceController {
     }
   }
 
+  @MessagePattern('listAttendanceByDate')
+  async getAllAttendenceByDate (@Payload() date: Date): Promise<AttendanceResponseDto[]> {
+    try {
+      const response = await this.attendanceService.findAllByDate(date);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @MessagePattern('getAttendanceById')
   async getAttendenceById (@Payload() attendanceId: string): Promise<AttendanceResponseDto> {
     try {
