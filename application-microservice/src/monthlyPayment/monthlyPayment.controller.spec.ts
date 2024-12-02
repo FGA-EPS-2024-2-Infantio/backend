@@ -1,102 +1,105 @@
 import { Test } from '@nestjs/testing';
 import { CreateMonthlyPaymentDto } from './dtos/CreateMonthlyPayment.dto';
 import { MonthlyPaymentMicroserviceController } from './monthlyPayment.controller';
-import { StudentsModule } from './monthlyPayment.module';
+import { MonthlyPaymentModule } from './monthlyPayment.module';
+import { CreateStudentDto } from '../students/dtos/CreateStudent.dto';
+import { StudentMicroserviceController } from '../students/student.controller';
+import { StudentsModule } from '../students/student.module';
 
 describe('MonthlyPaymentController', () => {
-  /*
-  let studentsController: MonthlyPaymentMicroserviceController;
+  let controller: MonthlyPaymentMicroserviceController;
+  let student;
+  let createPayment: CreateMonthlyPaymentDto;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [StudentsModule],
+      imports: [MonthlyPaymentModule, StudentsModule],
     }).compile();
 
-    studentsController = module.get(MonthlyPaymentMicroserviceController);
+    controller = module.get(MonthlyPaymentMicroserviceController);
+
+    const studentsController = module.get(StudentMicroserviceController);
+
+    const createStudent: CreateStudentDto = {
+      name: 'Student',
+      categorie: 'PARCIAL',
+      class: 'BERCARIO',
+      turn: 'MATUTINO',
+    };
+
+    const response = await studentsController.create(createStudent);
+
+    student = response.data;
+
+    createPayment = {
+      studentId: student.id,
+      month: 12,
+      year: 2024,
+      payed: true,
+      value: 189,
+    };
   });
 
   afterEach(() => jest.clearAllMocks());
 
   describe('getAll', () => {
-    it('Should return an array of students', async () => {
-      expect(await studentsController.getAll()).toBeInstanceOf(Array<object>);
+    it('Should return an array of payments', async () => {
+      expect(await controller.getAll()).toBeInstanceOf(Array<object>);
     });
   });
 
   describe('get', () => {
     it('Should return monthly payment', async () => {
-      const response = await studentsController.create({
-        studentId: ,
-        categorie: 'PARCIAL',
-        class: 'BERCARIO',
-        turn: 'MATUTINO',
-      });
+      const response = await controller.create(createPayment);
 
-      const studentId = response.data.id;
+      const { id } = response.data;
 
-      expect(await studentsController.get(studentId)).toBeInstanceOf(Object);
+      expect(await controller.get(id)).toBeInstanceOf(Object);
     });
   });
 
   describe('create', () => {
-    it('Should create a student', async () => {
-      const createStudent: CreateMonthlyPaymentDto = {
-        name: 'Student',
-        categorie: 'PARCIAL',
-        class: 'BERCARIO',
-        turn: 'MATUTINO',
-      };
+    it('Should create a payment', async () => {
+      const { message, data } = await controller.create(createPayment);
 
-      const { message, data } = await studentsController.create(createStudent);
-
-      expect(message).toBe('Student created successfully');
+      expect(message).toBe('Payment created successfully');
       expect(data).toBeInstanceOf(Object);
     });
   });
 
   describe('update', () => {
-    it('Should update a student', async () => {
-      const response = await studentsController.create({
-        name: 'Student',
-        categorie: 'PARCIAL',
-        class: 'BERCARIO',
-        turn: 'MATUTINO',
-      });
+    it('Should update a payment', async () => {
+      const response = await controller.create(createPayment);
 
-      const studentId = response.data.id;
+      const { id } = response.data;
 
-      const updatedStudent: CreateMonthlyPaymentDto = {
-        name: 'Student',
-        categorie: 'INTEGRAL',
-        class: 'BERCARIO',
-        turn: 'MATUTINO',
+      const updatedPayment: CreateMonthlyPaymentDto = {
+        studentId: student.id,
+        month: 11,
+        year: 2023,
+        payed: false,
+        value: 190,
       };
 
-      const { message, data } = await studentsController.update({
-        data: updatedStudent,
-        studentId,
+      const { message, data } = await controller.update({
+        data: updatedPayment,
+        monthlyPaymentId: id,
       });
 
-      expect(message).toBe('Student updated successfully');
-      expect(data).toMatchObject(updatedStudent);
+      expect(message).toBe('Payment updated successfully');
+      expect(data).toMatchObject(updatedPayment);
     });
   });
 
   describe('disable', () => {
-    it('should disable a student', async () => {
-      const response = await studentsController.create({
-        name: 'Student',
-        categorie: 'PARCIAL',
-        class: 'BERCARIO',
-        turn: 'MATUTINO',
-      });
+    it('should disable a payment', async () => {
+      const response = await controller.create(createPayment);
 
-      const studentId = response.data.id;
+      const { id } = response.data;
 
-      const { message } = await studentsController.disable(studentId);
+      const { message } = await controller.disable(id);
 
-      expect(message).toBe('Student deleted successfully');
+      expect(message).toBe('Payment deleted successfully');
     });
   });
-  */
 });

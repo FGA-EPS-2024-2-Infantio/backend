@@ -1,5 +1,5 @@
-import { Controller, Inject } from '@nestjs/common';
-import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
+import { Controller, NotFoundException } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateMonthlyPaymentDto } from './dtos/CreateMonthlyPayment.dto';
 import { MonthlyPaymentResponseDto } from './dtos/MonthlyPayment.dto';
 import { MonthlyPaymentService } from './monthlyPayment.service';
@@ -7,13 +7,17 @@ import { MonthlyPaymentService } from './monthlyPayment.service';
 @Controller()
 export class MonthlyPaymentMicroserviceController {
   constructor(
-    @Inject('NATS_SERVICE') private natsClients: ClientProxy,
     private readonly monthlyPaymentService: MonthlyPaymentService,
   ) {}
 
   @MessagePattern('createMonthlyPayment')
   async create(@Payload() createStudentDto: CreateMonthlyPaymentDto) {
-    return await this.monthlyPaymentService.create(createStudentDto);
+    const payment = await this.monthlyPaymentService.create(createStudentDto);
+
+    return {
+      message: 'Payment created successfully',
+      data: payment,
+    };
   }
 
   @MessagePattern('listMonthlyPayment')
@@ -23,18 +27,32 @@ export class MonthlyPaymentMicroserviceController {
 
   @MessagePattern('getMonthlyPayment')
   async get(studentId: string): Promise<MonthlyPaymentResponseDto> {
-    return await this.monthlyPaymentService.get(studentId);
+    const payment = await this.monthlyPaymentService.get(studentId);
+
+    if (payment === null) throw new NotFoundException('Payment not found');
+
+    return payment;
   }
 
   @MessagePattern('updateMonthlyPayment')
   async update(
     @Payload() input: { data: CreateMonthlyPaymentDto; monthlyPaymentId: string },
   ) {
-    return await this.monthlyPaymentService.update(input);
+    const payment = await this.monthlyPaymentService.update(input);
+
+    return {
+      message: 'Payment updated successfully',
+      data: payment,
+    };
   }
 
   @MessagePattern('disableMonthlyPayment')
   async disable(@Payload() studentId: string) {
-    return await this.monthlyPaymentService.disable(studentId);
+    const payment = await this.monthlyPaymentService.disable(studentId);
+
+    return {
+      message: 'Payment deleted successfully',
+      data: payment,
+    };
   }
 }
