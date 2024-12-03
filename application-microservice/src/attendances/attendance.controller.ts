@@ -84,7 +84,7 @@ export class AttendanceMicroserviceController {
     }
   }
 
-  @MessagePattern('updateTeacher')
+  @MessagePattern('updateAttendance')
   async update(
     @Payload() input: { data: CreateAttendanceDto; attendanceId: string },
   ): Promise<AttendanceResponseDto> {
