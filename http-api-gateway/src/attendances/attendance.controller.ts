@@ -48,7 +48,7 @@ export class AttendanceController {
     }
   }
 
-  @Get('/student/:date')
+  @Get('/date/:date')
   async getAttendanceByDate(@Param('date') studentId: string) {
     try {
       const response = this.natsClient.send('listAttendanceByDate', studentId);
