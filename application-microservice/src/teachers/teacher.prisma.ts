@@ -57,6 +57,9 @@ export class TeachersPrismaService {
   async findClassesByTeacher(teacherId: string) {
     return await this.prisma.class.findMany({
       where: { teacherId },
+      include: {
+        students: true
+      }
     });
   }
 
