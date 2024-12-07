@@ -7,6 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Students
+enum CategorieType {
+  PARCIAL
+  INTEGRAL
+}
+
+enum ClassType {
+  BERCARIO
+  CRECHE
+  ESCOLA
+  REFORCO
+}
+
+enum TurnType {
+  MATUTINO
+  VESPERTINO
+}
+
 model Student {
   id                 String        @id @default(cuid())
   name               String
@@ -27,6 +45,7 @@ model Student {
   observacoesMedicas Json?
   pai                Json?
   responsaveis       Json?
+  classes            Class[]
 }
 
 model School {
@@ -40,19 +59,30 @@ model School {
   disabledAt     DateTime?
 }
 
-enum CategorieType {
-  PARCIAL
-  INTEGRAL
+model Class {
+  id       String    @id @default(cuid())
+  name     String
+  students Student[]
+  disabled Boolean   @default(false)
+
+  disabledAt DateTime?
+
+  teacherId String
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
-enum ClassType {
-  BERCARIO
-  CRECHE
-  ESCOLA
-  REFORCO
-}
+model Teacher {
+  id              String   @id @default(cuid())
+  name            String
+  numberOfClasses Int
+  cpf             String   @unique @db.VarChar(14)
+  startDate       DateTime @map("start_date")
+  classes         Class[]
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
 
-enum TurnType {
-  MATUTINO
-  VESPERTINO
+  @@map("teacher")
 }
