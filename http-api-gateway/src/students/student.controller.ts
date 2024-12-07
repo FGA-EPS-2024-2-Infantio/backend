@@ -1,16 +1,20 @@
-import { HttpException, HttpStatus, Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Inject, Param, Patch, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateStudentDto } from './dtos/CreateStudent.dto';
-import { StudentResponseDto } from './dtos/StudentResponse.dto';
-import { SuccessCreateResponseDto, SuccessDisableResponseDto, SuccessUpdateResponseDto } from './dtos/SuccessResponse.dto';
-import { ValidationErrorResponseDto, NotFoundErrorResponseDto } from './dtos/ErrorResponse.dto';
 import { lastValueFrom } from 'rxjs';
+import { CreateStudentDto } from './dtos/CreateStudent.dto';
+import { NotFoundErrorResponseDto, ValidationErrorResponseDto } from './dtos/ErrorResponse.dto';
+import { StudentResponseDto } from './dtos/StudentResponse.dto';
+import {
+  SuccessCreateResponseDto,
+  SuccessDisableResponseDto,
+  SuccessUpdateResponseDto,
+} from './dtos/SuccessResponse.dto';
 
 @ApiTags('Students')
 @Controller('students')
 export class StudentsController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) { }
+  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
 
   @Post()
   @ApiOperation({ summary: 'Cria um estudante' })
@@ -81,7 +85,7 @@ export class StudentsController {
   @Patch(':studentId')
   async updateStudent(@Param('studentId') studentId: string, @Body() updateStudentDto: CreateStudentDto) {
     const response = await lastValueFrom(
-      this.natsClient.send('updateStudent', { data: updateStudentDto, studentId: studentId })
+      this.natsClient.send('updateStudent', { data: updateStudentDto, studentId: studentId }),
     );
 
     if (response?.statusCode && response?.statusCode !== HttpStatus.OK) {
