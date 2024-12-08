@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Inject, Param, Patch, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 import { CreateStudentDto } from './dtos/CreateStudent.dto';
 
 @Controller('students')
@@ -23,7 +24,15 @@ export class StudentsController {
 
   @Patch(':studentId')
   async updateStudent(@Param('studentId') studentId: string, @Body() updateStudentDto: CreateStudentDto) {
-    return await this.natsClient.send('updateStudent', { data: updateStudentDto, studentId: studentId });
+    const response = await lastValueFrom(
+      this.natsClient.send('updateStudent', { data: updateStudentDto, studentId: studentId }),
+    );
+
+    if (response?.statusCode && response?.statusCode !== HttpStatus.OK) {
+      throw new HttpException(response.message, response.statusCode);
+    }
+
+    return response;
   }
 
   @Delete(':studentId')

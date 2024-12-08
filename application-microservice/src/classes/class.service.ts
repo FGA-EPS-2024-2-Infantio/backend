@@ -37,4 +37,8 @@ export class ClassesService {
   ): Promise<ClassResponseDto> {
     return await this.classesPrismaService.updateStudents(classId, studentIds);
   }
+
+  async findStudentsByClass(classId: string) {
+    return await this.classesPrismaService.findStudentsByClass(classId);
+  }
 }

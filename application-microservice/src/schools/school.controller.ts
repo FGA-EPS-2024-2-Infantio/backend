@@ -37,4 +37,25 @@ export class SchoolMicroserviceController {
   ): Promise<SchoolResponseDto> {
     return await this.schoolService.update(input);
   }
+
+  @MessagePattern('getSchoolClasses')
+  async getSchoolClasses(@Payload() schoolId: string) {
+    try {
+      return await this.schoolService.findClassesBySchool(schoolId);
+    } catch (error) {
+      throw new Error(`Failed to fetch classes for teacher ${schoolId}: ${error.message}`);
+    }
+  } 
+
+  @MessagePattern('getSchoolStudents')
+  async getSchoolStudents(@Payload() schoolId: string) {
+    return await this.schoolService.findStudentsBySchool(schoolId);
+  }
+
+  @MessagePattern('getSchoolTeachers')
+  async getSchoolTeachers(@Payload() schoolId: string) {
+    return await this.schoolService.findTeachersBySchool(schoolId);
+  }
+
 }
+
