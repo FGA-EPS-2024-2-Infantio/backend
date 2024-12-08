@@ -1,8 +1,8 @@
 import { Controller, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateSchoolDto } from './dtos/CreateStudent.dto';
-import { SchoolsService } from './school.service';
 import { SchoolResponseDto } from './dtos/SchoolResponse.dto';
+import { SchoolsService } from './school.service';
 
 @Controller()
 export class SchoolMicroserviceController {
@@ -43,9 +43,11 @@ export class SchoolMicroserviceController {
     try {
       return await this.schoolService.findClassesBySchool(schoolId);
     } catch (error) {
-      throw new Error(`Failed to fetch classes for teacher ${schoolId}: ${error.message}`);
+      throw new Error(
+        `Failed to fetch classes for teacher ${schoolId}: ${error.message}`,
+      );
     }
-  } 
+  }
 
   @MessagePattern('getSchoolStudents')
   async getSchoolStudents(@Payload() schoolId: string) {
@@ -56,6 +58,4 @@ export class SchoolMicroserviceController {
   async getSchoolTeachers(@Payload() schoolId: string) {
     return await this.schoolService.findTeachersBySchool(schoolId);
   }
-
 }
-
