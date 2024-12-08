@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -49,34 +43,43 @@ enum TurnType {
 }
 
 model Student {
-  id         String        @id @default(cuid())
-  name       String
-  categorie  CategorieType
-  class      ClassType
-  turn       TurnType
-  disabled   Boolean       @default(false)
-  disabledAt DateTime?
-  createdAt  DateTime      @default(now())
-  updatedAt  DateTime      @updatedAt
-  classes    Class[]
-
-  schoolId String 
-  school   School  @relation(fields: [schoolId], references: [id])
+  id                 String        @id @default(cuid())
+  name               String
+  categorie          CategorieType
+  schoolId           String
+  school             School        @relation(fields: [schoolId], references: [id])
+  isFilled           Boolean       @default(false)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  class              ClassType
+  disabled           Boolean       @default(false)
+  disabledAt         DateTime?
+  turn               TurnType
+  cep                String?
+  dataNascimento     String?
+  endereco           String?
+  mae                Json?
+  naturalidadeAluno  String?
+  observacoes        Json?
+  observacoesMedicas Json?
+  pai                Json?
+  responsaveis       Json?
+  classes            Class[]
 }
 
 model School {
-  id             String    @id @default(cuid())
+  id             String   @id @default(cuid())
   name           String
   directorEmail  String
   numberStudents Int
-  disabled       Boolean   @default(false)
-  disabledAt     DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  classes  Class[]  
-  students Student[]
-  teachers Teacher[]
+  classes    Class[]
+  students   Student[]
+  teachers   Teacher[]
+  disabled   Boolean   @default(false)
+  disabledAt DateTime?
 }
 
 model Teacher {
@@ -87,11 +90,11 @@ model Teacher {
   startDate       DateTime @map("start_date")
   classes         Class[]
 
-  schoolId String 
-  school   School  @relation(fields: [schoolId], references: [id])
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
 
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("teacher")
 }
