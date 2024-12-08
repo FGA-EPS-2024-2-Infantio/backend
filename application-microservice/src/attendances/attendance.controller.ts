@@ -95,4 +95,17 @@ export class AttendanceMicroserviceController {
       throw error;
     }
   }
+
+
+  @MessagePattern('updateList')
+  async updateAttendanceList(
+    @Payload() input: {attendanceList: CreateAttendanceDto[]},
+  ): Promise<number> {
+    try {
+      const response = await this.attendanceService.updateAttendanceList(input);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

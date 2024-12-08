@@ -31,6 +31,10 @@ export class AttendanceService {
     return await this.attendancePrismaService.get();
   }
 
+  async updateAttendanceList(input: { attendanceList: CreateAttendanceDto[]}): Promise <number> {
+    return await this.attendancePrismaService.updateAttendanceList(input)
+  }
+
   async update(input: { data: CreateAttendanceDto; attendanceId: string }) {
     return await this.attendancePrismaService.update(input);
   }
