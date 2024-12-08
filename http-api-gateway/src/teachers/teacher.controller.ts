@@ -38,6 +38,20 @@ export class TeacherController {
     }
   }
 
+  @Get(':teacherId/classes')
+  async getTeacherClasses(@Param('teacherId') teacherId: string) {
+    try {
+      const response = await lastValueFrom(
+        this.natsClient.send('getTeacherClasses', teacherId),
+      );
+      return response;
+    } catch (error) {
+      throw new BadRequestException(
+        `Failed to retrieve classes for teacher ${teacherId}: ${error.message}`,
+      );
+    }
+  }
+
   @Delete(':teacherId')
   @HttpCode(200)
   async deleteTeacher(@Param('teacherId') teacherId: string) {

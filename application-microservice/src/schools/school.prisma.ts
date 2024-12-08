@@ -55,4 +55,22 @@ export class SchoolsPrismaService {
       data: input.data,
     });
   }
+
+  async findClassesBySchool(schoolId: string) {
+    return await this.prisma.class.findMany({
+      where: { schoolId },
+    });
+  }
+
+  async findStudentsBySchool(schoolId: string) {
+    return await this.prisma.student.findMany({
+      where: { schoolId },
+    });
+  }
+
+  async findTeachersBySchool(schoolId: string) {
+    return await this.prisma.teacher.findMany({
+      where: { schoolId },
+    });
+  }
 }

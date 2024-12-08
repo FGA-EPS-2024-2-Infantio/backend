@@ -8,8 +8,18 @@ import { TeacherResponseDto } from './dtos/TeacherResponse.dto';
 export class TeachersPrismaService {
   constructor(private prisma: PrismaService) {}
 
-  async createTeacher(data:CreateTeacherDto) {
-    return await this.prisma.teacher.create({ data });
+  async createTeacher(data: CreateTeacherDto) {
+    return await this.prisma.teacher.create({ 
+      data: {
+        name: data.name,
+        numberOfClasses: data.numberOfClasses,
+        cpf: data.cpf,
+        startDate: data.startDate,
+        school: {
+          connect: { id: data.schoolId },
+        },
+      },
+    });
   }
 
   async findAllTeachers(): Promise<TeacherResponseDto[]> {
@@ -41,6 +51,15 @@ export class TeachersPrismaService {
         id: input.teacherId,
       },
       data: input.data,
+    });
+  }
+
+  async findClassesByTeacher(teacherId: string) {
+    return await this.prisma.class.findMany({
+      where: { teacherId },
+      include: {
+        students: true
+      }
     });
   }
 

@@ -6,6 +6,7 @@ export class CreateStudentDto {
   categorie: CategorieType; // Use a enumeração correta do Prisma
   class: ClassType; // Use a enumeração correta do Prisma
   turn: TurnType; // Use a enumeração correta do Prisma
+  schoolId: string;
 
   dataNascimento?: string;
   naturalidadeAluno?: string;

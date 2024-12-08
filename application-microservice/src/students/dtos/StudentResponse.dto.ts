@@ -7,7 +7,14 @@ export class StudentResponseDto {
   categorie: CategorieType;
   class: ClassType;
   turn: TurnType;
-  
+  school?: {
+    id: string;
+    name: string;
+  };
+  classes?: {
+    id: string;
+    name: string;
+  }[];
   dataNascimento?: string;
   naturalidadeAluno?: string;
   endereco?: string;

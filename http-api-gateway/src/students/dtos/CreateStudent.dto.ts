@@ -1,7 +1,6 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CategorieType, ClassType, TurnType } from './Enums.dto';
-import { ApiProperty } from '@nestjs/swagger';
 
 class ParentDataDto {
   @IsString()
@@ -93,22 +92,18 @@ class ObservacoesMedicasDto {
 export class CreateStudentDto {
   @IsNotEmpty()
   @IsString()
-  @ApiProperty()
   name: string;
-  
+
   @IsEnum(CategorieType)
   @IsNotEmpty()
-  @ApiProperty()
   categorie: CategorieType;
-  
+
   @IsEnum(ClassType)
   @IsNotEmpty()
-  @ApiProperty()
   class: ClassType;
-  
+
   @IsEnum(TurnType)
   @IsNotEmpty()
-  @ApiProperty()
   turn: TurnType;
 
   @IsOptional()

@@ -7,7 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Students
+model Class {
+  id       String    @id @default(cuid())
+  name     String
+  students Student[]
+  disabled Boolean   @default(false)
+
+  disabledAt DateTime?
+
+  teacherId String
+  teacher   Teacher @relation(fields: [teacherId], references: [id])
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+}
+
 enum CategorieType {
   PARCIAL
   INTEGRAL
@@ -28,10 +45,12 @@ enum TurnType {
 model Student {
   id                 String        @id @default(cuid())
   name               String
+  categorie          CategorieType
+  schoolId           String
+  school             School        @relation(fields: [schoolId], references: [id])
   isFilled           Boolean       @default(false)
   createdAt          DateTime      @default(now())
   updatedAt          DateTime      @updatedAt
-  categorie          CategorieType
   class              ClassType
   disabled           Boolean       @default(false)
   disabledAt         DateTime?
@@ -49,29 +68,18 @@ model Student {
 }
 
 model School {
-  id             String    @id @default(cuid())
+  id             String   @id @default(cuid())
   name           String
   directorEmail  String
   numberStudents Int
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  disabled       Boolean   @default(false)
-  disabledAt     DateTime?
-}
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-model Class {
-  id       String    @id @default(cuid())
-  name     String
-  students Student[]
-  disabled Boolean   @default(false)
-
+  classes    Class[]
+  students   Student[]
+  teachers   Teacher[]
+  disabled   Boolean   @default(false)
   disabledAt DateTime?
-
-  teacherId String
-  teacher   Teacher @relation(fields: [teacherId], references: [id])
-
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 }
 
 model Teacher {
@@ -81,8 +89,12 @@ model Teacher {
   cpf             String   @unique @db.VarChar(14)
   startDate       DateTime @map("start_date")
   classes         Class[]
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("teacher")
 }
