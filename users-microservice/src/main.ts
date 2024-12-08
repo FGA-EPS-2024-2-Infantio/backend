@@ -1,6 +1,7 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
+import { PrismaClientExceptionFilter } from './prisma-client-exception.filter';
 
 async function bootstrap() {
   console.log('Users Microservice is Running');
@@ -13,6 +14,9 @@ async function bootstrap() {
       },
     },
   );
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
   await app.listen();
 }

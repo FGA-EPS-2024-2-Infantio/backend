@@ -1,5 +1,10 @@
 import { Controller, Inject } from '@nestjs/common';
-import { ClientProxy, EventPattern, Payload, MessagePattern, } from '@nestjs/microservices';
+import {
+  ClientProxy,
+  EventPattern,
+  MessagePattern,
+  Payload,
+} from '@nestjs/microservices';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
 import { TeacherResponseDto } from './dtos/TeacherResponse.dto';
@@ -11,7 +16,7 @@ export class TeacherMicroserviceController {
     @Inject('NATS_SERVICE') private natsClients: ClientProxy,
     private prisma: PrismaService,
     private readonly teachersService: TeachersService,
-  ) { }
+  ) {}
   @MessagePattern('createTeacher')
   async createTeacher(@Payload() createTeacherDto: CreateTeacherDto) {
     try {
@@ -19,6 +24,7 @@ export class TeacherMicroserviceController {
         data: {
           name: createTeacherDto.name,
           numberOfClasses: createTeacherDto.numberOfClasses,
+          userId: createTeacherDto.userId,
           cpf: createTeacherDto.cpf,
           startDate: new Date(createTeacherDto.startDate),
           school: {
@@ -30,21 +36,21 @@ export class TeacherMicroserviceController {
       return {
         success: true,
         data: teacher,
-        message: 'Teacher created successfully'
+        message: 'Teacher created successfully',
       };
     } catch (error) {
       if (error.code === 'P2002') {
         return {
           success: false,
           error: 'CPF already exists',
-          code: 'UNIQUE_CONSTRAINT'
+          code: 'UNIQUE_CONSTRAINT',
         };
       }
-      if (error.code === 'P2000'){
+      if (error.code === 'P2000') {
         return {
           success: false,
           error: 'Value too long for the column',
-          code: 'META_TARGET'
+          code: 'META_TARGET',
         };
       }
       throw error;
@@ -78,12 +84,11 @@ export class TeacherMicroserviceController {
 
       return {
         success: true,
-        message: `Successfully Teacher:${teacherId} deleted`
+        message: `Successfully Teacher:${teacherId} deleted`,
       };
     } catch (error) {
       throw error;
     }
- 
   }
 
   @MessagePattern('updateTeacher')
@@ -92,19 +97,22 @@ export class TeacherMicroserviceController {
   ): Promise<TeacherResponseDto> {
     try {
       const response = await this.teachersService.update(input);
-      return response
+      return response;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   @MessagePattern('getTeacherClasses')
   async getTeacherClasses(@Payload() teacherId: string) {
     try {
-      const classes = await this.teachersService.findClassesByTeacher(teacherId);
+      const classes =
+        await this.teachersService.findClassesByTeacher(teacherId);
       return classes;
     } catch (error) {
-      throw new Error(`Failed to fetch classes for teacher ${teacherId}: ${error.message}`);
+      throw new Error(
+        `Failed to fetch classes for teacher ${teacherId}: ${error.message}`,
+      );
     }
   }
 }

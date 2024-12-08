@@ -71,6 +71,7 @@ model School {
   id             String   @id @default(cuid())
   name           String
   directorEmail  String
+  userId         String   @unique
   numberStudents Int
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -89,9 +90,9 @@ model Teacher {
   cpf             String   @unique @db.VarChar(14)
   startDate       DateTime @map("start_date")
   classes         Class[]
-
-  schoolId String
-  school   School @relation(fields: [schoolId], references: [id])
+  userId          String   @unique
+  schoolId        String
+  school          School   @relation(fields: [schoolId], references: [id])
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

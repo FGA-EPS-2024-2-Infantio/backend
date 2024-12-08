@@ -9,9 +9,10 @@ export class TeachersPrismaService {
   constructor(private prisma: PrismaService) {}
 
   async createTeacher(data: CreateTeacherDto) {
-    return await this.prisma.teacher.create({ 
+    return await this.prisma.teacher.create({
       data: {
         name: data.name,
+        userId: data.userId,
         numberOfClasses: data.numberOfClasses,
         cpf: data.cpf,
         startDate: data.startDate,
@@ -58,9 +59,8 @@ export class TeachersPrismaService {
     return await this.prisma.class.findMany({
       where: { teacherId },
       include: {
-        students: true
-      }
+        students: true,
+      },
     });
   }
-
 }

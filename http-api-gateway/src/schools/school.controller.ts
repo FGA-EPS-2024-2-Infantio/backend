@@ -1,14 +1,28 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CreateSchoolDto } from './dtos/CreateSchool.dto';
-import { lastValueFrom } from 'rxjs';
 
 @Controller('schools')
 export class SchoolsController {
   constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
   @Post()
-  createSchool(@Body() createSchoolDto: CreateSchoolDto) {
-    this.natsClient.emit('createSchool', createSchoolDto);
+  async createSchool(@Body() createSchoolDto: CreateSchoolDto) {
+    const user = await firstValueFrom(
+      this.natsClient.send('registerUser', {
+        name: createSchoolDto.directorName,
+        email: createSchoolDto.directorEmail,
+        password: createSchoolDto.directorPassword,
+        role: 'DIRECTOR',
+      }),
+    );
+
+    this.natsClient.emit('createSchool', {
+      name: createSchoolDto.name,
+      directorEmail: createSchoolDto.directorEmail,
+      numberStudents: createSchoolDto.numberStudents,
+      userId: user.id,
+    });
   }
 
   @Get()
@@ -23,23 +37,17 @@ export class SchoolsController {
 
   @Get(':schoolId/classes')
   async getSchoolClasses(@Param('schoolId') schoolId: string) {
-    return await lastValueFrom(
-      this.natsClient.send('getSchoolClasses', schoolId),
-    );
+    return await lastValueFrom(this.natsClient.send('getSchoolClasses', schoolId));
   }
 
   @Get(':schoolId/students')
   async getSchoolStudents(@Param('schoolId') schoolId: string) {
-    return await lastValueFrom(
-      this.natsClient.send('getSchoolStudents', schoolId),
-    );
+    return await lastValueFrom(this.natsClient.send('getSchoolStudents', schoolId));
   }
 
   @Get(':schoolId/teachers')
   async getSchoolTeachers(@Param('schoolId') schoolId: string) {
-    return await lastValueFrom(
-      this.natsClient.send('getSchoolTeachers', schoolId),
-    );
+    return await lastValueFrom(this.natsClient.send('getSchoolTeachers', schoolId));
   }
 
   @Delete(':schoolId')

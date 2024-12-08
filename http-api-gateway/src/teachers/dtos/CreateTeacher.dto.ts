@@ -1,10 +1,18 @@
-import { IsNotEmpty, IsNumber, IsString, IsDate } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateTeacherDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  email: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -18,4 +26,8 @@ export class CreateTeacherDto {
   @Type(() => Date)
   @IsDate()
   startDate: Date;
+
+  @IsNotEmpty()
+  @IsString()
+  schoolId: string;
 }
