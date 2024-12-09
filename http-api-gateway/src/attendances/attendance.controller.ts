@@ -48,10 +48,13 @@ export class AttendanceController {
     }
   }
 
-  @Get('/date/:date')
-  async getAttendanceByDate(@Param('date') studentId: string) {
+  @Get('/date/:date/class/:classId')
+  async getAttendanceByDate(
+    @Param('date') date: string,
+    @Param('classId') classId: string
+  ) {
     try {
-      const response = this.natsClient.send('listAttendanceByDate', studentId);
+      const response = this.natsClient.send('listAttendanceByDate', { date, classId });
       return response;
     } catch (error) {
       throw error;

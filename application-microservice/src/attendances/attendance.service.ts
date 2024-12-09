@@ -19,8 +19,8 @@ export class AttendanceService {
     return await this.attendancePrismaService.findAttendanceByStudent(studentId);
   }
 
-  async findAllByDate(date: Date): Promise<AttendanceResponseDto[]> {
-    return await this.attendancePrismaService.findAttendanceByDate(date);
+  async findAllByDateAndClass(date: Date, classId:string): Promise<AttendanceResponseDto[]> {
+    return await this.attendancePrismaService.findAttendanceByDateAndClass(date,classId);
   }
 
   async getById(attendanceId: string): Promise <AttendanceResponseDto> {

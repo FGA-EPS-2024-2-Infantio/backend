@@ -18,6 +18,7 @@ export class AttendancePrismaService {
             classId: classId
         }, 
         select: {
+            id: true, 
             studentId: true, 
             student: true,
             date: true,
@@ -42,18 +43,19 @@ export class AttendancePrismaService {
     });
   }
 
-  async findAttendanceByDate(date: Date): Promise<AttendanceResponseDto[]> {
+  async findAttendanceByDateAndClass(date: Date, classId: string): Promise<AttendanceResponseDto[]> {
     return await this.prisma.attendance.findMany({
-        where: {
-            date: new Date(date),
-        }, 
-        select: {
-            studentId: true, 
-            student: true,
-            date: true,
-            classId: true,
-            hasAttended: true,
-        }
+      where: {
+        date: new Date(date),
+        classId: classId, 
+      },
+      select: {
+        studentId: true,
+        student: true,
+        date: true,
+        classId: true,
+        hasAttended: true,
+      },
     });
   }
 
