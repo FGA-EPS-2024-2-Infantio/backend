@@ -1,5 +1,17 @@
-import { BadRequestException, Body, Controller, Get, Param, Inject, Post, Delete, Patch, HttpCode } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Inject,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
 import { lastValueFrom } from 'rxjs';
 import { ConflictException } from '@nestjs/common';
@@ -8,12 +20,31 @@ import { HttpStatus } from '@nestjs/common';
 
 @Controller('teachers')
 export class TeacherController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) { }
+  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
   @Post()
   async createTeacher(@Body() createTeacherDto: CreateTeacherDto) {
     try {
+      
+      const user = await firstValueFrom(
+        this.natsClient.send('registerUser', {
+          name: createteacherDto.name,
+          email: createteacherDto.email,
+          password: createteacherDto.password,
+          role: 'TEACHER',
+        }),
+      );
+
+      console.log('AAAAAAAAAAAAAAAAAAAAA', user);
+
       const response = await lastValueFrom(
-        this.natsClient.send('createTeacher', createTeacherDto),
+        this.natsClient.send('createTeacher', {
+          name: createteacherDto.name,
+          numberOfClasses: createteacherDto.numberOfClasses,
+          cpf: createteacherDto.cpf,
+          startDate: createteacherDto.startDate,
+          schoolId: createteacherDto.schoolId,
+          userId: user.id,
+        }),
       );
 
       if (!response.success) {
@@ -61,6 +92,16 @@ export class TeacherController {
       return response;
     } catch (error) {
       throw error;
+    }
+  }
+
+  @Get(':teacherId/classes')
+  async getTeacherClasses(@Param('teacherId') teacherId: string) {
+    try {
+      const response = await lastValueFrom(this.natsClient.send('getTeacherClasses', teacherId));
+      return response;
+    } catch (error) {
+      throw new BadRequestException(`Failed to retrieve classes for teacher ${teacherId}: ${error.message}`);
     }
   }
 

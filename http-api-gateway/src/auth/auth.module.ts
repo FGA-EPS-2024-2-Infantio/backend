@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { NatsClientModule } from 'src/nats-client/nats-client.module';
-import { UsersController } from './users.controller';
+import { AuthController } from './auth.controller';
 
 @Module({
   imports: [NatsClientModule],
-  controllers: [UsersController],
+  controllers: [AuthController],
   providers: [],
 })
-export class UsersModule {}
+export class AuthModule {}

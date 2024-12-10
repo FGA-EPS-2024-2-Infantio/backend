@@ -7,7 +7,15 @@ export class CreateSchoolDto {
 
   @IsString()
   @IsNotEmpty()
-  directorEmail: number;
+  directorName: string;
+
+  @IsString()
+  @IsNotEmpty()
+  directorEmail: string;
+
+  @IsString()
+  @IsNotEmpty()
+  directorPassword: string;
 
   @IsInt()
   @IsNotEmpty()

@@ -10,38 +10,46 @@ export class StudentsService {
   constructor(private readonly studentsPrismaService: StudentsPrismaService) {}
 
   async create(data: CreateStudentDto) {
-    const student = await this.studentsPrismaService.create(data);
-
-    return {
-      message: 'Student created successfully',
-      data: student,
-    };
+    try {
+      const student = await this.studentsPrismaService.create(data);
+      return {
+        message: 'Student created successfully',
+        data: student,
+      };
+    } catch (error) {
+      throw new Error('Failed to create student: ' + error.message);
+    }
   }
+  
 
   async findAll(): Promise<StudentResponseDto[]> {
     return await this.studentsPrismaService.findAll();
   }
-
+  
   async get(studentId: string): Promise<StudentResponseDto> {
     const student = await this.studentsPrismaService.get(studentId);
-
-    if (student === null)
-      throw new PrismaClientKnownRequestError('Student not found', {
-        code: 'P2025',
-        clientVersion: Prisma.prismaVersion.client,
-      });
-
+  
+    if (student === null) {
+      throw new Error('Student not found');
+    }
+  
     return student;
   }
+  
 
   async update(input: { data: CreateStudentDto; studentId: string }) {
-    const student = await this.studentsPrismaService.update(input);
-
-    return {
-      message: 'Student updated successfully',
-      data: student,
-    };
+    try {
+      const student = await this.studentsPrismaService.update(input);
+  
+      return {
+        message: 'Student updated successfully',
+        data: student,
+      };
+    } catch (error) {
+      throw new Error('Failed to update student: ' + error.message);
+    }
   }
+  
 
   async disable(studentId: string) {
     const student = await this.studentsPrismaService.disable(studentId);

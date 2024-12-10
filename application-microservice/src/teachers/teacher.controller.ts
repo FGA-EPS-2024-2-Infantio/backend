@@ -24,8 +24,12 @@ export class TeacherMicroserviceController {
         data: {
           name: createTeacherDto.name,
           numberOfClasses: createTeacherDto.numberOfClasses,
+          userId: createTeacherDto.userId,
           cpf: createTeacherDto.cpf,
           startDate: new Date(createTeacherDto.startDate),
+          school: {
+            connect: { id: createTeacherDto.schoolId },
+          },
         },
       });
 
@@ -40,8 +44,6 @@ export class TeacherMicroserviceController {
           success: false,
           error: 'CPF already exists',
           code: 'UNIQUE_CONSTRAINT',
-          
-          
         };
       }
       if (error.code === 'P2000') {
@@ -98,6 +100,19 @@ export class TeacherMicroserviceController {
       return response;
     } catch (error) {
       throw error;
+    }
+  }
+
+  @MessagePattern('getTeacherClasses')
+  async getTeacherClasses(@Payload() teacherId: string) {
+    try {
+      const classes =
+        await this.teachersService.findClassesByTeacher(teacherId);
+      return classes;
+    } catch (error) {
+      throw new Error(
+        `Failed to fetch classes for teacher ${teacherId}: ${error.message}`,
+      );
     }
   }
 }
