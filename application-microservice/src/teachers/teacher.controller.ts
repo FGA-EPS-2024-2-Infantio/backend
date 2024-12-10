@@ -40,6 +40,8 @@ export class TeacherMicroserviceController {
           success: false,
           error: 'CPF already exists',
           code: 'UNIQUE_CONSTRAINT',
+          
+          
         };
       }
       if (error.code === 'P2000') {
