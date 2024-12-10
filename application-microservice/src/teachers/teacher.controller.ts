@@ -2,8 +2,8 @@ import { Controller, Inject } from '@nestjs/common';
 import {
   ClientProxy,
   EventPattern,
-  MessagePattern,
   Payload,
+  MessagePattern,
 } from '@nestjs/microservices';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
@@ -77,14 +77,14 @@ export class TeacherMicroserviceController {
     }
   }
 
-  @EventPattern('deleteTeacher')
-  async disable(@Payload() teacherId: string) {
+  @EventPattern('disableTeacher')
+  async disable(@Payload() input: {teacherId: string}) {
     try {
-      await this.teachersService.delete(teacherId);
+      await this.teachersService.disable(input);
 
       return {
         success: true,
-        message: `Successfully Teacher:${teacherId} deleted`,
+        message: `Teacher:${input.teacherId} successfully disabled`,
       };
     } catch (error) {
       throw error;

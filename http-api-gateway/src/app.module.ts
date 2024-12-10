@@ -6,9 +6,10 @@ import { SchoolModule } from './schools/school.module';
 import { StudentModule } from './students/student.module';
 import { TeacherModule } from './teachers/teacher.module';
 import { UserModule } from './users/user.module';
+import { AttendanceModule } from './attendances/attendance.module';
 
 @Module({
-  imports: [NatsClientModule, StudentModule, SchoolModule, TeacherModule, ClassModule, AuthModule, UserModule],
+  imports: [NatsClientModule, StudentModule, SchoolModule, TeacherModule, ClassModule, AuthModule, UserModule,AttendanceModule],
   controllers: [],
   providers: [],
 })

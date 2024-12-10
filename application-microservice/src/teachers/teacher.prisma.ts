@@ -35,11 +35,13 @@ export class TeachersPrismaService {
     });
   }
 
-  async delete(teacherId: string): Promise<void> {
-    await this.prisma.teacher.delete({
-      where: {
-        id: teacherId,
-      },
+  async disable(input: {teacherId: string}): Promise<void> {
+    await this.prisma.teacher.update({
+      where: {id: input.teacherId},
+      data: {
+        disabledAt: new Date(),
+        disabled: true,
+      }
     });
   }
 
