@@ -50,9 +50,7 @@ export class ClassController {
 
   @Get(':classId/students')
   async getClassStudents(@Param('classId') classId: string) {
-    return await lastValueFrom(
-      this.natsClient.send('getClassStudents', classId),
-    );
+    return await lastValueFrom(this.natsClient.send('getClassStudents', classId));
   }
 
   @Delete(':classId')

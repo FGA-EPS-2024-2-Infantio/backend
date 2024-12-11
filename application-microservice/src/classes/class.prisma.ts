@@ -9,7 +9,13 @@ export class ClassesPrismaService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateClassDto): Promise<ClassResponseDto> {
-    const { name, teacherId, schoolId } = data;
+    const { name, teacherId, userId } = data;
+
+    const school = await this.prisma.school.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
 
     const newClass = await this.prisma.class.create({
       data: {
@@ -18,7 +24,7 @@ export class ClassesPrismaService {
           connect: { id: teacherId },
         },
         school: {
-          connect: { id: schoolId },
+          connect: { id: school.id },
         },
         disabled: false,
       },
@@ -156,6 +162,12 @@ export class ClassesPrismaService {
   }): Promise<ClassResponseDto> {
     const { data, classId } = input;
 
+    const school = await this.prisma.school.findUnique({
+      where: {
+        userId: data.userId,
+      },
+    });
+
     const updatedClass = await this.prisma.class.update({
       where: {
         id: classId,
@@ -166,7 +178,7 @@ export class ClassesPrismaService {
           connect: { id: data.teacherId },
         },
         school: {
-          connect: { id: data.schoolId }, // Inclui school no update
+          connect: { id: school.id }, // Inclui school no update
         },
         disabled: data.disabled ?? undefined,
       },

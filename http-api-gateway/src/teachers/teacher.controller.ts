@@ -1,10 +1,13 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   Get,
   HttpCode,
+  HttpException,
+  HttpStatus,
   Inject,
   Param,
   Patch,
@@ -13,10 +16,6 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
-import { lastValueFrom } from 'rxjs';
-import { ConflictException } from '@nestjs/common';
-import { HttpException } from '@nestjs/common';
-import { HttpStatus } from '@nestjs/common';
 
 @Controller('teachers')
 export class TeacherController {
@@ -24,25 +23,22 @@ export class TeacherController {
   @Post()
   async createTeacher(@Body() createTeacherDto: CreateTeacherDto) {
     try {
-      
       const user = await firstValueFrom(
         this.natsClient.send('registerUser', {
-          name: createteacherDto.name,
-          email: createteacherDto.email,
-          password: createteacherDto.password,
+          name: createTeacherDto.name,
+          email: createTeacherDto.email,
+          password: createTeacherDto.password,
           role: 'TEACHER',
         }),
       );
 
-      console.log('AAAAAAAAAAAAAAAAAAAAA', user);
-
       const response = await lastValueFrom(
         this.natsClient.send('createTeacher', {
-          name: createteacherDto.name,
-          numberOfClasses: createteacherDto.numberOfClasses,
-          cpf: createteacherDto.cpf,
-          startDate: createteacherDto.startDate,
-          schoolId: createteacherDto.schoolId,
+          name: createTeacherDto.name,
+          numberOfClasses: createTeacherDto.numberOfClasses,
+          cpf: createTeacherDto.cpf,
+          startDate: createTeacherDto.startDate,
+          schoolId: createTeacherDto.schoolId,
           userId: user.id,
         }),
       );
@@ -68,10 +64,7 @@ export class TeacherController {
         throw error;
       }
 
-      throw new HttpException(
-        'Internal server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw new HttpException('Internal server error', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -110,9 +103,9 @@ export class TeacherController {
   async disableTeacher(@Param('teacherId') teacherId: string) {
     try {
       const response = this.natsClient.emit('disableTeacher', { teacherId: teacherId });
-      return response
+      return response;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 

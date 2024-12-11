@@ -18,8 +18,12 @@ model Class {
   teacherId String
   teacher   Teacher @relation(fields: [teacherId], references: [id])
 
-  createdAt  DateTime     @default(now()) @map("created_at")
-  updatedAt  DateTime     @updatedAt @map("updated_at")
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   attendance Attendance[]
 }
 
@@ -63,6 +67,7 @@ model Student {
   pai                Json?
   responsaveis       Json?
   classes            Class[]
+  Attendance         Attendance[]
 }
 
 model Attendance {
@@ -76,7 +81,7 @@ model Attendance {
   student Student @relation(fields: [studentId], references: [id])
 
   @@map("attendance")
-  }
+}
 
 model School {
   id             String   @id @default(cuid())
@@ -106,12 +111,10 @@ model Teacher {
   updatedAt  DateTime  @updatedAt @map("updated_at")
   disabledAt DateTime? @map("disabled_at")
 
-  classes Class[]
-  classes         Class[]
-  userId          String   @unique
-  schoolId        String
-  school          School   @relation(fields: [schoolId], references: [id])
-
+  classes  Class[]
+  userId   String  @unique
+  schoolId String
+  school   School  @relation(fields: [schoolId], references: [id])
 
   @@map("teacher")
 }
