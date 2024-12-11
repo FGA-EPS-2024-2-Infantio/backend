@@ -38,6 +38,7 @@ export class StudentsPrismaService {
       turn: student.turn,
       dataNascimento: student.dataNascimento,
       naturalidadeAluno: student.naturalidadeAluno,
+      payments: student.payments,
       endereco: student.endereco,
       cep: student.cep,
       mae: student.mae ? JSON.parse(student.mae) : undefined,
