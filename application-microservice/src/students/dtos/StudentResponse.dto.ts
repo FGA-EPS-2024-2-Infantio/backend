@@ -1,4 +1,9 @@
-import { CategorieType, ClassType, MonthlyPayment, TurnType } from '@prisma/client';
+import {
+  CategorieType,
+  ClassType,
+  MonthlyPayment,
+  TurnType,
+} from '@prisma/client';
 
 export class StudentResponseDto {
   id: string;

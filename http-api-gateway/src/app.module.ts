@@ -10,7 +10,17 @@ import { MonthlyPaymentModule } from './monthlyPayment/monthlyPayment.module';
 import { AttendanceModule } from './attendances/attendance.module';
 
 @Module({
-  imports: [NatsClientModule, StudentModule, SchoolModule, TeacherModule, ClassModule, AuthModule, UsersModule, AttendanceModule, MonthlyPaymentModule],
+  imports: [
+    NatsClientModule,
+    StudentModule,
+    SchoolModule,
+    TeacherModule,
+    ClassModule,
+    AuthModule,
+    UsersModule,
+    AttendanceModule,
+    MonthlyPaymentModule,
+  ],
   controllers: [],
   providers: [],
 })

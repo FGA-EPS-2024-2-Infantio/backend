@@ -5,7 +5,9 @@ import { MonthlyPaymentPrismaService } from './monthlyPayment.prisma';
 
 @Injectable()
 export class MonthlyPaymentService {
-  constructor(private readonly monthlyPaymentPrismaService: MonthlyPaymentPrismaService) {}
+  constructor(
+    private readonly monthlyPaymentPrismaService: MonthlyPaymentPrismaService,
+  ) {}
 
   async create(data: CreateMonthlyPaymentDto) {
     return await this.monthlyPaymentPrismaService.create(data);

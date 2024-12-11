@@ -5,7 +5,9 @@ import { AttendancePrismaService } from './attendance.prisma';
 
 @Injectable()
 export class AttendanceService {
-  constructor(private readonly attendancePrismaService: AttendancePrismaService) {}
+  constructor(
+    private readonly attendancePrismaService: AttendancePrismaService,
+  ) {}
 
   async create(data: CreateAttendanceDto) {
     return await this.attendancePrismaService.createAttendance(data);
@@ -16,23 +18,33 @@ export class AttendanceService {
   }
 
   async findAllByStudent(studentId: string): Promise<AttendanceResponseDto[]> {
-    return await this.attendancePrismaService.findAttendanceByStudent(studentId);
+    return await this.attendancePrismaService.findAttendanceByStudent(
+      studentId,
+    );
   }
 
-  async findAllByDateAndClass(date: Date, classId:string): Promise<AttendanceResponseDto[]> {
-    return await this.attendancePrismaService.findAttendanceByDateAndClass(date,classId);
+  async findAllByDateAndClass(
+    date: Date,
+    classId: string,
+  ): Promise<AttendanceResponseDto[]> {
+    return await this.attendancePrismaService.findAttendanceByDateAndClass(
+      date,
+      classId,
+    );
   }
 
-  async getById(attendanceId: string): Promise <AttendanceResponseDto> {
+  async getById(attendanceId: string): Promise<AttendanceResponseDto> {
     return await this.attendancePrismaService.getById(attendanceId);
   }
 
-  async get(): Promise <AttendanceResponseDto[]> {
+  async get(): Promise<AttendanceResponseDto[]> {
     return await this.attendancePrismaService.get();
   }
 
-  async updateAttendanceList(input: { attendanceList: CreateAttendanceDto[]}): Promise <number> {
-    return await this.attendancePrismaService.updateAttendanceList(input)
+  async updateAttendanceList(input: {
+    attendanceList: CreateAttendanceDto[];
+  }): Promise<number> {
+    return await this.attendancePrismaService.updateAttendanceList(input);
   }
 
   async update(input: { data: CreateAttendanceDto; attendanceId: string }) {

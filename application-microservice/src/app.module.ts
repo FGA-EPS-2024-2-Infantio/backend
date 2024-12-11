@@ -7,7 +7,14 @@ import { MonthlyPaymentModule } from './monthlyPayment/monthlyPayment.module';
 import { AttendanceModule } from './attendances/attendance.module';
 
 @Module({
-  imports: [StudentsModule, SchoolsModule, TeachersModule, ClassModule, AttendanceModule, MonthlyPaymentModule],
+  imports: [
+    StudentsModule,
+    SchoolsModule,
+    TeachersModule,
+    ClassModule,
+    AttendanceModule,
+    MonthlyPaymentModule,
+  ],
   controllers: [],
   providers: [],
 })

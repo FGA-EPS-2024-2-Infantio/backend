@@ -6,9 +6,7 @@ import { MonthlyPaymentService } from './monthlyPayment.service';
 
 @Controller()
 export class MonthlyPaymentMicroserviceController {
-  constructor(
-    private readonly monthlyPaymentService: MonthlyPaymentService,
-  ) {}
+  constructor(private readonly monthlyPaymentService: MonthlyPaymentService) {}
 
   @MessagePattern('createMonthlyPayment')
   async create(@Payload() createStudentDto: CreateMonthlyPaymentDto) {
@@ -36,7 +34,11 @@ export class MonthlyPaymentMicroserviceController {
 
   @MessagePattern('updateMonthlyPayment')
   async update(
-    @Payload() input: { data: CreateMonthlyPaymentDto; monthlyPaymentId: string },
+    @Payload()
+    input: {
+      data: CreateMonthlyPaymentDto;
+      monthlyPaymentId: string;
+    },
   ) {
     const payment = await this.monthlyPaymentService.update(input);
 

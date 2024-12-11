@@ -22,8 +22,14 @@ export class MonthlyPaymentController {
   }
 
   @Patch(':monthlyPaymentId')
-  async updateMonthlyPayment(@Param('monthlyPaymentId') monthlyPaymentId: string, @Body() updateMonthlyPaymentDto: CreateMonthlyPaymentDto) {
-    return await this.natsClient.send('updateMonthlyPayment', { data: updateMonthlyPaymentDto, monthlyPaymentId: monthlyPaymentId });
+  async updateMonthlyPayment(
+    @Param('monthlyPaymentId') monthlyPaymentId: string,
+    @Body() updateMonthlyPaymentDto: CreateMonthlyPaymentDto,
+  ) {
+    return await this.natsClient.send('updateMonthlyPayment', {
+      data: updateMonthlyPaymentDto,
+      monthlyPaymentId: monthlyPaymentId,
+    });
   }
 
   @Delete(':monthlyPaymentId')

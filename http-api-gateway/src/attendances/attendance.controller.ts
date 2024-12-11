@@ -1,17 +1,15 @@
-import { BadRequestException, Body, Controller, Get, Param, Inject, Post, Delete, Patch, HttpCode, ValidationPipe, UsePipes, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Inject, Post, Patch } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 import { CreateAttendanceDto } from './dtos/CreateAttendance.dto';
 
 @Controller('attendances')
 export class AttendanceController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) { }
+  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
   @Post()
   async createAttendance(@Body() createAttendanceDto: CreateAttendanceDto[]) {
     try {
-      const response = await lastValueFrom(
-        this.natsClient.send('createAttendance', createAttendanceDto)
-      );
+      const response = await lastValueFrom(this.natsClient.send('createAttendance', createAttendanceDto));
       return response;
     } catch (error) {
       throw error;
@@ -49,10 +47,7 @@ export class AttendanceController {
   }
 
   @Get('/date/:date/class/:classId')
-  async getAttendanceByDate(
-    @Param('date') date: string,
-    @Param('classId') classId: string
-  ) {
+  async getAttendanceByDate(@Param('date') date: string, @Param('classId') classId: string) {
     try {
       const response = this.natsClient.send('listAttendanceByDate', { date, classId });
       return response;
@@ -72,9 +67,15 @@ export class AttendanceController {
   }
 
   @Patch(':attendanceId')
-  async updateAttendance(@Param('attendanceId') attendanceId: string, @Body() updateAttendanceDto: CreateAttendanceDto) {
+  async updateAttendance(
+    @Param('attendanceId') attendanceId: string,
+    @Body() updateAttendanceDto: CreateAttendanceDto,
+  ) {
     try {
-      const response = this.natsClient.emit('updateAttendance', { data: updateAttendanceDto, attendanceId: attendanceId });
+      const response = this.natsClient.emit('updateAttendance', {
+        data: updateAttendanceDto,
+        attendanceId: attendanceId,
+      });
       return response;
     } catch (error) {
       throw error;
