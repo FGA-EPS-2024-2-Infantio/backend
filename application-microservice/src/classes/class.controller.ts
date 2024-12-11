@@ -45,4 +45,9 @@ export class ClassMicroserviceController {
   ): Promise<ClassResponseDto> {
     return await this.classService.updateStudents(classId, studentIds);
   }
+
+  @MessagePattern('getClassStudents')
+  async getClassStudents(@Payload() classId: string) {
+    return await this.classService.findStudentsByClass(classId);
+  }
 }

@@ -7,6 +7,10 @@ export class CreateClassDto {
 
   @IsNotEmpty()
   @IsString()
+  userId: string;
+
+  @IsNotEmpty()
+  @IsString()
   teacherId: string;
 
   @IsOptional()

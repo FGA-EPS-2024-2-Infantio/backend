@@ -20,11 +20,16 @@ export class TeachersService {
     return await this.teachersPrismaService.get(teacherId);
   }
 
-  async delete(teacherId: string): Promise<void> {
-    await this.teachersPrismaService.delete(teacherId);
+  async disable(input: {teacherId: string}): Promise<void> {
+    await this.teachersPrismaService.disable(input);
   }
 
   async update(input: { data: CreateTeacherDto; teacherId: string }) {
     return await this.teachersPrismaService.update(input);
+  }
+
+  async findClassesByTeacher(teacherId: string) {
+    console.log(`Recebido teacherId: ${teacherId}`);
+    return await this.teachersPrismaService.findClassesByTeacher(teacherId);
   }
 }

@@ -1,7 +1,8 @@
 export class CreateTeacherDto {
-    name: string;
-    numberOfClasses: number;
-    cpf: string;
-    startDate: Date;
-  }
-  
+  name: string;
+  numberOfClasses: number;
+  cpf: string;
+  startDate: Date;
+  schoolId: string;
+  userId: string;
+}

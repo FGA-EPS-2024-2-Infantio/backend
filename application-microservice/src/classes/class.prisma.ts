@@ -1,6 +1,6 @@
 // src/modules/schools/prisma/schools.prisma.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../database/prisma.service';
 import { ClassResponseDto } from './dtos/ClassResponse.dto';
 import { CreateClassDto } from './dtos/CreateClass.dto';
 
@@ -9,12 +9,23 @@ export class ClassesPrismaService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateClassDto): Promise<ClassResponseDto> {
-    const { name, teacherId } = data;
+    const { name, teacherId, userId } = data;
+
+    const school = await this.prisma.school.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
 
     const newClass = await this.prisma.class.create({
       data: {
         name,
-        teacherId,
+        teacher: {
+          connect: { id: teacherId },
+        },
+        school: {
+          connect: { id: school.id },
+        },
         disabled: false,
       },
       include: {
@@ -151,13 +162,24 @@ export class ClassesPrismaService {
   }): Promise<ClassResponseDto> {
     const { data, classId } = input;
 
+    const school = await this.prisma.school.findUnique({
+      where: {
+        userId: data.userId,
+      },
+    });
+
     const updatedClass = await this.prisma.class.update({
       where: {
         id: classId,
       },
       data: {
         name: data.name,
-        teacherId: data.teacherId,
+        teacher: {
+          connect: { id: data.teacherId },
+        },
+        school: {
+          connect: { id: school.id }, // Inclui school no update
+        },
         disabled: data.disabled ?? undefined,
       },
       include: {
@@ -219,5 +241,15 @@ export class ClassesPrismaService {
       createdAt: updatedClass.createdAt,
       updatedAt: updatedClass.updatedAt,
     };
+  }
+
+  async findStudentsByClass(classId: string) {
+    return await this.prisma.student.findMany({
+      where: {
+        classes: {
+          some: { id: classId },
+        },
+      },
+    });
   }
 }

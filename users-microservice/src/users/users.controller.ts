@@ -1,28 +1,16 @@
-import { Controller } from '@nestjs/common';
-import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
-import { PrismaService } from 'src/database/prisma.service';
-import { CreateUserDto } from './dtos/CreateUser.dto';
+import { Controller, UseGuards } from '@nestjs/common';
+import { MessagePattern, Payload } from '@nestjs/microservices';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { UsersService } from 'src/users/users.service';
 
 @Controller()
-export class UserMicroserviceController {
-  constructor(private prisma: PrismaService) {}
+export class UsersMicroserviceController {
+  constructor(private usersService: UsersService) {}
 
-  @MessagePattern({
-    cmd: 'createUser',
-  })
-  async createUser(@Payload() createUserDto: CreateUserDto) {
-    await this.prisma.user.create({
-      data: {
-        displayName: createUserDto.displayName,
-        email: createUserDto.email,
-        username: createUserDto.username,
-      },
-    });
-    return createUserDto;
-  }
-
-  @EventPattern('studentCreated')
-  studentCreated(@Payload() data: any) {
-    console.log('Evento recebido de outro serviço:', data);
+  @MessagePattern('getUserProfile')
+  @UseGuards(JwtGuard)
+  async getUserProfile(@Payload() data: { userId: string; user: any }) {
+    const user1 = await this.usersService.getById(data.userId);
+    return user1;
   }
 }
