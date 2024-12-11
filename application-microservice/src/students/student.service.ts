@@ -2,8 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dtos/CreateStudent.dto';
 import { StudentResponseDto } from './dtos/StudentResponse.dto';
 import { StudentsPrismaService } from './student.prisma';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
-import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class StudentsService {
@@ -20,27 +18,25 @@ export class StudentsService {
       throw new Error('Failed to create student: ' + error.message);
     }
   }
-  
 
   async findAll(): Promise<StudentResponseDto[]> {
     return await this.studentsPrismaService.findAll();
   }
-  
+
   async get(studentId: string): Promise<StudentResponseDto> {
     const student = await this.studentsPrismaService.get(studentId);
-  
+
     if (student === null) {
       throw new Error('Student not found');
     }
-  
+
     return student;
   }
-  
 
   async update(input: { data: CreateStudentDto; studentId: string }) {
     try {
       const student = await this.studentsPrismaService.update(input);
-  
+
       return {
         message: 'Student updated successfully',
         data: student,
@@ -49,7 +45,6 @@ export class StudentsService {
       throw new Error('Failed to update student: ' + error.message);
     }
   }
-  
 
   async disable(studentId: string) {
     const student = await this.studentsPrismaService.disable(studentId);

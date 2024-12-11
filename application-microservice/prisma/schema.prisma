@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -68,6 +69,7 @@ model Student {
   responsaveis       Json?
   classes            Class[]
   Attendance         Attendance[]
+  payments           MonthlyPayment[]
 }
 
 model Attendance {
@@ -117,4 +119,18 @@ model Teacher {
   school   School  @relation(fields: [schoolId], references: [id])
 
   @@map("teacher")
+}
+
+model MonthlyPayment {
+  id         String        @id @default(cuid())
+  student    Student       @relation(fields: [studentId], references: [id])
+  studentId  String
+  month      Int
+  year       Int
+  value      Float
+  payed      Boolean       @default(false)
+  disabled   Boolean       @default(false)
+  disabledAt DateTime?
+  createdAt  DateTime      @default(now()) @map("created_at")
+  updatedAt  DateTime      @updatedAt @map("updated_at")
 }

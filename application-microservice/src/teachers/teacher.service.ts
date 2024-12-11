@@ -20,7 +20,7 @@ export class TeachersService {
     return await this.teachersPrismaService.get(teacherId);
   }
 
-  async disable(input: {teacherId: string}): Promise<void> {
+  async disable(input: { teacherId: string }): Promise<void> {
     await this.teachersPrismaService.disable(input);
   }
 

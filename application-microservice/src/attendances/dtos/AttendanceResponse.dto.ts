@@ -1,9 +1,9 @@
-import { Student } from "@prisma/client";
+import { Student } from '@prisma/client';
 
 export class AttendanceResponseDto {
-    studentId: string;
-    student?: Student;
-    classId: string;
-    date: Date;
-    hasAttended: boolean;
+  studentId: string;
+  student?: Student;
+  classId: string;
+  date: Date;
+  hasAttended: boolean;
 }

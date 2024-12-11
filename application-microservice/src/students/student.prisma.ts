@@ -13,15 +13,20 @@ export class StudentsPrismaService {
         ...data,
         mae: data.mae ? JSON.stringify(data.mae) : undefined,
         pai: data.pai ? JSON.stringify(data.pai) : undefined,
-        responsaveis: data.responsaveis ? JSON.stringify(data.responsaveis) : undefined,
-        observacoes: data.observacoes ? JSON.stringify(data.observacoes) : undefined,
-        observacoesMedicas: data.observacoesMedicas ? JSON.stringify(data.observacoesMedicas) : undefined,
+        responsaveis: data.responsaveis
+          ? JSON.stringify(data.responsaveis)
+          : undefined,
+        observacoes: data.observacoes
+          ? JSON.stringify(data.observacoes)
+          : undefined,
+        observacoesMedicas: data.observacoesMedicas
+          ? JSON.stringify(data.observacoesMedicas)
+          : undefined,
       },
     });
-  
+
     return this.mapToStudentResponseDto(student);
   }
-  
 
   private mapToStudentResponseDto(student: any): StudentResponseDto {
     return {
@@ -37,40 +42,65 @@ export class StudentsPrismaService {
       cep: student.cep,
       mae: student.mae ? JSON.parse(student.mae) : undefined,
       pai: student.pai ? JSON.parse(student.pai) : undefined,
-      responsaveis: student.responsaveis ? JSON.parse(student.responsaveis) : undefined,
-      observacoes: student.observacoes ? JSON.parse(student.observacoes) : undefined,
-      observacoesMedicas: student.observacoesMedicas ? JSON.parse(student.observacoesMedicas) : undefined,
+      responsaveis: student.responsaveis
+        ? JSON.parse(student.responsaveis)
+        : undefined,
+      observacoes: student.observacoes
+        ? JSON.parse(student.observacoes)
+        : undefined,
+      observacoesMedicas: student.observacoesMedicas
+        ? JSON.parse(student.observacoesMedicas)
+        : undefined,
       disabled: student.disabled,
       disabledAt: student.disabledAt,
     };
   }
-  
 
   async findAll(): Promise<StudentResponseDto[]> {
     const students = await this.prisma.student.findMany({
-      orderBy: [{ name: 'asc' }],
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
+      orderBy: [
+        {
+          name: 'asc',
+        },
+      ],
     });
-  
+
     // Mapeie os resultados para o tipo StudentResponseDto
-    return students.map(student => this.mapToStudentResponseDto(student));
+    return students.map((student) => this.mapToStudentResponseDto(student));
   }
-  
 
   async get(studentId: string): Promise<StudentResponseDto> {
     const student = await this.prisma.student.findUnique({
-      where: { id: studentId },
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
+      where: {
+        id: studentId,
+      },
     });
-  
+
     if (!student) {
       throw new Error('Student not found');
     }
-  
+
     return this.mapToStudentResponseDto(student);
   }
-  
-  async update(input: { data: CreateStudentDto; studentId: string }): Promise<StudentResponseDto> {
+
+  async update(input: {
+    data: CreateStudentDto;
+    studentId: string;
+  }): Promise<StudentResponseDto> {
     const { data, studentId } = input;
     const updatedStudent = await this.prisma.student.update({
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
       where: { id: studentId },
       data: {
         name: data.name,
@@ -84,20 +114,27 @@ export class StudentsPrismaService {
         cep: data.cep,
         mae: data.mae ? JSON.stringify(data.mae) : undefined,
         pai: data.pai ? JSON.stringify(data.pai) : undefined,
-        responsaveis: data.responsaveis ? JSON.stringify(data.responsaveis) : undefined,
-        observacoes: data.observacoes ? JSON.stringify(data.observacoes) : undefined,
-        observacoesMedicas: data.observacoesMedicas ? JSON.stringify(data.observacoesMedicas) : undefined,
+        responsaveis: data.responsaveis
+          ? JSON.stringify(data.responsaveis)
+          : undefined,
+        observacoes: data.observacoes
+          ? JSON.stringify(data.observacoes)
+          : undefined,
+        observacoesMedicas: data.observacoesMedicas
+          ? JSON.stringify(data.observacoesMedicas)
+          : undefined,
       },
     });
-  
+
     return this.mapToStudentResponseDto(updatedStudent);
   }
-  
-  
-  
 
   async disable(studentId: string): Promise<StudentResponseDto> {
     const student = await this.prisma.student.update({
+      relationLoadStrategy: 'join',
+      include: {
+        payments: true,
+      },
       where: {
         id: studentId,
       },
@@ -106,8 +143,7 @@ export class StudentsPrismaService {
         disabledAt: new Date(),
       },
     });
-  
+
     return this.mapToStudentResponseDto(student);
   }
-  
 }

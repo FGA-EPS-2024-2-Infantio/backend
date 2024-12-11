@@ -12,42 +12,49 @@ export class AttendancePrismaService {
     return await this.prisma.attendance.create({ data });
   }
 
-  async findAttendanceByClass(classId: string): Promise<AttendanceResponseDto[]> {
+  async findAttendanceByClass(
+    classId: string,
+  ): Promise<AttendanceResponseDto[]> {
     return await this.prisma.attendance.findMany({
-        where: {
-            classId: classId
-        }, 
-        select: {
-            id: true, 
-            studentId: true, 
-            student: true,
-            date: true,
-            classId: true,
-            hasAttended: true,
-        }
+      where: {
+        classId: classId,
+      },
+      select: {
+        id: true,
+        studentId: true,
+        student: true,
+        date: true,
+        classId: true,
+        hasAttended: true,
+      },
     });
   }
 
-  async findAttendanceByStudent(studentId: string): Promise<AttendanceResponseDto[]> {
+  async findAttendanceByStudent(
+    studentId: string,
+  ): Promise<AttendanceResponseDto[]> {
     return await this.prisma.attendance.findMany({
-        where: {
-            studentId: studentId,
-        }, 
-        select: {
-            studentId: true, 
-            student: true,
-            date: true,
-            classId: true,
-            hasAttended: true,
-        }
+      where: {
+        studentId: studentId,
+      },
+      select: {
+        studentId: true,
+        student: true,
+        date: true,
+        classId: true,
+        hasAttended: true,
+      },
     });
   }
 
-  async findAttendanceByDateAndClass(date: Date, classId: string): Promise<AttendanceResponseDto[]> {
+  async findAttendanceByDateAndClass(
+    date: Date,
+    classId: string,
+  ): Promise<AttendanceResponseDto[]> {
     return await this.prisma.attendance.findMany({
       where: {
         date: new Date(date),
-        classId: classId, 
+        classId: classId,
       },
       select: {
         studentId: true,
@@ -65,12 +72,12 @@ export class AttendancePrismaService {
         id: attendanceId,
       },
       select: {
-        studentId: true, 
+        studentId: true,
         student: true,
         date: true,
         classId: true,
         hasAttended: true,
-    }
+      },
     });
   }
 
@@ -90,7 +97,9 @@ export class AttendancePrismaService {
     });
   }
 
-  async updateAttendanceList(input: {attendanceList: CreateAttendanceDto[]}): Promise<number> {
+  async updateAttendanceList(input: {
+    attendanceList: CreateAttendanceDto[];
+  }): Promise<number> {
     const updates = input.attendanceList.map((attendance) =>
       this.prisma.attendance.updateMany({
         where: {
@@ -101,13 +110,13 @@ export class AttendancePrismaService {
         data: {
           hasAttended: attendance.hasAttended,
         },
-      })
+      }),
     );
-  
+
     const results = await this.prisma.$transaction(updates);
-  
+
     const totalUpdated = results.reduce((sum, result) => sum + result.count, 0);
-  
+
     return totalUpdated;
   }
 }

@@ -1,10 +1,5 @@
 import { Controller, Inject } from '@nestjs/common';
-import {
-  ClientProxy,
-  EventPattern,
-  Payload,
-  MessagePattern,
-} from '@nestjs/microservices';
+import { ClientProxy, Payload, MessagePattern } from '@nestjs/microservices';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateAttendanceDto } from './dtos/CreateAttendance.dto';
 import { AttendanceResponseDto } from './dtos/AttendanceResponse.dto';
@@ -18,10 +13,12 @@ export class AttendanceMicroserviceController {
     private readonly attendanceService: AttendanceService,
   ) {}
   @MessagePattern('createAttendance')
-  async createAttendance(@Payload() createAttendanceDto: CreateAttendanceDto[]) {
+  async createAttendance(
+    @Payload() createAttendanceDto: CreateAttendanceDto[],
+  ) {
     try {
       const attendance = await this.prisma.attendance.createMany({
-        data: createAttendanceDto
+        data: createAttendanceDto,
       });
 
       return {
@@ -35,7 +32,9 @@ export class AttendanceMicroserviceController {
   }
 
   @MessagePattern('listAttendanceByClassId')
-  async getAllAttendanceByClass(@Payload() classId: string): Promise<AttendanceResponseDto[]> {
+  async getAllAttendanceByClass(
+    @Payload() classId: string,
+  ): Promise<AttendanceResponseDto[]> {
     try {
       const response = await this.attendanceService.findAllByClass(classId);
       return response;
@@ -45,7 +44,9 @@ export class AttendanceMicroserviceController {
   }
 
   @MessagePattern('listAttendanceByStudentId')
-  async getAllAttendenceByStudent (@Payload() studentId: string): Promise<AttendanceResponseDto[]> {
+  async getAllAttendenceByStudent(
+    @Payload() studentId: string,
+  ): Promise<AttendanceResponseDto[]> {
     try {
       const response = await this.attendanceService.findAllByStudent(studentId);
       return response;
@@ -56,11 +57,14 @@ export class AttendanceMicroserviceController {
 
   @MessagePattern('listAttendanceByDate')
   async getAllAttendenceByDate(
-    @Payload() payload: { date: Date; classId: string }
+    @Payload() payload: { date: Date; classId: string },
   ): Promise<AttendanceResponseDto[]> {
     try {
       const { date, classId } = payload;
-      const response = await this.attendanceService.findAllByDateAndClass(date, classId);
+      const response = await this.attendanceService.findAllByDateAndClass(
+        date,
+        classId,
+      );
       return response;
     } catch (error) {
       throw error;
@@ -68,22 +72,24 @@ export class AttendanceMicroserviceController {
   }
 
   @MessagePattern('getAttendanceById')
-  async getAttendenceById (@Payload() attendanceId: string): Promise<AttendanceResponseDto> {
+  async getAttendenceById(
+    @Payload() attendanceId: string,
+  ): Promise<AttendanceResponseDto> {
     try {
-        const response = await this.attendanceService.getById(attendanceId);
-        return response;
+      const response = await this.attendanceService.getById(attendanceId);
+      return response;
     } catch (error) {
-        throw error;
+      throw error;
     }
   }
 
   @MessagePattern('listAttendance')
-  async getAttendence (): Promise<AttendanceResponseDto[]> {
+  async getAttendence(): Promise<AttendanceResponseDto[]> {
     try {
-        const response = await this.attendanceService.get();
-        return response;
+      const response = await this.attendanceService.get();
+      return response;
     } catch (error) {
-        throw error;
+      throw error;
     }
   }
 
@@ -99,10 +105,9 @@ export class AttendanceMicroserviceController {
     }
   }
 
-
   @MessagePattern('updateList')
   async updateAttendanceList(
-    @Payload() input: {attendanceList: CreateAttendanceDto[]},
+    @Payload() input: { attendanceList: CreateAttendanceDto[] },
   ): Promise<number> {
     try {
       const response = await this.attendanceService.updateAttendanceList(input);

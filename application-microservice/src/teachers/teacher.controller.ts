@@ -78,7 +78,7 @@ export class TeacherMicroserviceController {
   }
 
   @EventPattern('disableTeacher')
-  async disable(@Payload() input: {teacherId: string}) {
+  async disable(@Payload() input: { teacherId: string }) {
     try {
       await this.teachersService.disable(input);
 
