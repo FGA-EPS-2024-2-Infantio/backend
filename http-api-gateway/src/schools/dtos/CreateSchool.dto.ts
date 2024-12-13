@@ -1,20 +1,20 @@
-import { IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateSchoolDto {
   @IsNotEmpty()
   @IsString()
   name: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   directorName: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   directorEmail: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   directorPassword: string;
 
   @IsInt()
