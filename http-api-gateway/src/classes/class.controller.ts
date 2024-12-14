@@ -28,10 +28,10 @@ export class ClassController {
     }
   }
 
-  @Get()
-  async listClasses() {
+  @Get(':userId/list')
+  async listClasses(@Param('userId') userId: string) {
     try {
-      const response = await this.natsClient.send('listClasses', {});
+      const response = await this.natsClient.send('listClasses', { userId: userId });
       return response;
     } catch (error) {
       throw new BadRequestException('Failed to fetch classes', error);

@@ -12,8 +12,8 @@ export class ClassesService {
     return await this.classesPrismaService.create(data);
   }
 
-  async findAll(): Promise<ClassResponseDto[]> {
-    return await this.classesPrismaService.findAll();
+  async findAll(input: { userId: string }): Promise<ClassResponseDto[]> {
+    return await this.classesPrismaService.findAll(input);
   }
 
   async get(classId: string): Promise<ClassResponseDto> {

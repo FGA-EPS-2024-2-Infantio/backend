@@ -23,8 +23,16 @@ export class TeachersPrismaService {
     });
   }
 
-  async findAllTeachers(): Promise<TeacherResponseDto[]> {
-    return await this.prisma.teacher.findMany();
+  async findAllTeachers(input: {
+    userId: string;
+  }): Promise<TeacherResponseDto[]> {
+    return await this.prisma.teacher.findMany({
+      where: {
+        school: {
+          userId: input.userId,
+        },
+      },
+    });
   }
 
   async get(teacherId: string): Promise<TeacherResponseDto> {
@@ -59,7 +67,11 @@ export class TeachersPrismaService {
 
   async findClassesByTeacher(teacherId: string) {
     return await this.prisma.class.findMany({
-      where: { teacherId },
+      where: {
+        teacher: {
+          userId: teacherId,
+        },
+      },
       include: {
         students: true,
       },

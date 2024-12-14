@@ -17,8 +17,8 @@ export class ClassMicroserviceController {
   }
 
   @MessagePattern('listClasses')
-  async getAllClasses(): Promise<ClassResponseDto[]> {
-    return await this.classService.findAll();
+  async getAllClasses(input: { userId: string }): Promise<ClassResponseDto[]> {
+    return await this.classService.findAll(input);
   }
 
   @MessagePattern('getClass')

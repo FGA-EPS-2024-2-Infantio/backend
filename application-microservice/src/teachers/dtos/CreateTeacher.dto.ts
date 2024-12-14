@@ -5,4 +5,5 @@ export class CreateTeacherDto {
   startDate: Date;
   schoolId: string;
   userId: string;
+  directorId: string;
 }

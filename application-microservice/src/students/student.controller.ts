@@ -17,8 +17,8 @@ export class StudentMicroserviceController {
   }
 
   @MessagePattern('listStudent')
-  async getAll(): Promise<StudentResponseDto[]> {
-    return await this.studentService.findAll();
+  async getAll(input: { userId: string }): Promise<StudentResponseDto[]> {
+    return await this.studentService.findAll(input);
   }
 
   @MessagePattern('getStudent')

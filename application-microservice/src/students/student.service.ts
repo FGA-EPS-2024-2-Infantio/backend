@@ -19,8 +19,8 @@ export class StudentsService {
     }
   }
 
-  async findAll(): Promise<StudentResponseDto[]> {
-    return await this.studentsPrismaService.findAll();
+  async findAll(input: { userId: string }): Promise<StudentResponseDto[]> {
+    return await this.studentsPrismaService.findAll(input);
   }
 
   async get(studentId: string): Promise<StudentResponseDto> {

@@ -38,8 +38,8 @@ export class TeacherController {
           numberOfClasses: createTeacherDto.numberOfClasses,
           cpf: createTeacherDto.cpf,
           startDate: createTeacherDto.startDate,
-          schoolId: createTeacherDto.schoolId,
           userId: user.id,
+          directorId: createTeacherDto.userId,
         }),
       );
 
@@ -68,10 +68,10 @@ export class TeacherController {
     }
   }
 
-  @Get()
-  async listTeacher() {
+  @Get(':userId/list')
+  async listTeacher(@Param('userId') userId: string) {
     try {
-      const response = this.natsClient.send('listTeacher', {});
+      const response = this.natsClient.send('listTeacher', { userId: userId });
       return response;
     } catch (error) {
       throw error;

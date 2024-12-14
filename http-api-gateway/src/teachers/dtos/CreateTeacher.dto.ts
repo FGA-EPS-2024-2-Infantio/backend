@@ -29,5 +29,5 @@ export class CreateTeacherDto {
 
   @IsOptional()
   @IsString()
-  schoolId: string;
+  userId: string;
 }

@@ -2,8 +2,8 @@ import { Controller, Inject } from '@nestjs/common';
 import {
   ClientProxy,
   EventPattern,
-  Payload,
   MessagePattern,
+  Payload,
 } from '@nestjs/microservices';
 import { PrismaService } from 'src/database/prisma.service';
 import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
@@ -28,7 +28,7 @@ export class TeacherMicroserviceController {
           cpf: createTeacherDto.cpf,
           startDate: new Date(createTeacherDto.startDate),
           school: {
-            connect: { id: createTeacherDto.schoolId },
+            connect: { userId: createTeacherDto.directorId },
           },
         },
       });
@@ -58,9 +58,11 @@ export class TeacherMicroserviceController {
   }
 
   @MessagePattern('listTeacher')
-  async getAllTeachers(): Promise<TeacherResponseDto[]> {
+  async getAllTeachers(input: {
+    userId: string;
+  }): Promise<TeacherResponseDto[]> {
     try {
-      const response = await this.teachersService.findAll();
+      const response = await this.teachersService.findAll(input);
       return response;
     } catch (error) {
       throw error;

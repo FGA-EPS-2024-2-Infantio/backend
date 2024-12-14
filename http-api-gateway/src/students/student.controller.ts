@@ -12,9 +12,9 @@ export class StudentsController {
     return await this.natsClient.send('createStudent', createStudentDto);
   }
 
-  @Get()
-  async listStudent() {
-    return await this.natsClient.send('listStudent', {});
+  @Get(':userId/list')
+  async listStudent(@Param('userId') userId: string) {
+    return await this.natsClient.send('listStudent', { userId: userId });
   }
 
   @Get(':studentId')

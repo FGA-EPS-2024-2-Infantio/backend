@@ -52,8 +52,13 @@ export class ClassesPrismaService {
     };
   }
 
-  async findAll(): Promise<ClassResponseDto[]> {
+  async findAll(input: { userId: string }): Promise<ClassResponseDto[]> {
     const classes = await this.prisma.class.findMany({
+      where: {
+        school: {
+          userId: input.userId,
+        },
+      },
       orderBy: [
         {
           disabledAt: 'desc',

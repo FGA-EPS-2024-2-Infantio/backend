@@ -1,5 +1,5 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { CategorieType, ClassType, TurnType } from './Enums.dto';
 
 class ParentDataDto {
@@ -93,6 +93,10 @@ export class CreateStudentDto {
   @IsNotEmpty()
   @IsString()
   name: string;
+
+  @IsOptional()
+  @IsString()
+  userId: string;
 
   @IsEnum(CategorieType)
   @IsNotEmpty()

@@ -8,9 +8,22 @@ export class StudentsPrismaService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateStudentDto): Promise<StudentResponseDto> {
+    const { userId, ...filteredData } = data;
+
+    const school = await this.prisma.school.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    console.log('BBBBBBBBBBBBBBBB', school);
+
     const student = await this.prisma.student.create({
       data: {
-        ...data,
+        ...filteredData,
+        school: {
+          connect: { id: school.id },
+        },
         mae: data.mae ? JSON.stringify(data.mae) : undefined,
         pai: data.pai ? JSON.stringify(data.pai) : undefined,
         responsaveis: data.responsaveis
@@ -57,9 +70,14 @@ export class StudentsPrismaService {
     };
   }
 
-  async findAll(): Promise<StudentResponseDto[]> {
+  async findAll(input: { userId: string }): Promise<StudentResponseDto[]> {
     const students = await this.prisma.student.findMany({
       relationLoadStrategy: 'join',
+      where: {
+        school: {
+          userId: input.userId,
+        },
+      },
       include: {
         payments: true,
       },
@@ -69,6 +87,8 @@ export class StudentsPrismaService {
         },
       ],
     });
+
+    console.log(students);
 
     // Mapeie os resultados para o tipo StudentResponseDto
     return students.map((student) => this.mapToStudentResponseDto(student));

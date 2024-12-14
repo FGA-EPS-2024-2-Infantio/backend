@@ -12,8 +12,8 @@ export class TeachersService {
     return await this.teachersPrismaService.createTeacher(data);
   }
 
-  async findAll(): Promise<TeacherResponseDto[]> {
-    return await this.teachersPrismaService.findAllTeachers();
+  async findAll(input: { userId: string }): Promise<TeacherResponseDto[]> {
+    return await this.teachersPrismaService.findAllTeachers(input);
   }
 
   async get(teacherId: string): Promise<TeacherResponseDto> {
@@ -29,7 +29,6 @@ export class TeachersService {
   }
 
   async findClassesByTeacher(teacherId: string) {
-    console.log(`Recebido teacherId: ${teacherId}`);
     return await this.teachersPrismaService.findClassesByTeacher(teacherId);
   }
 }
