@@ -114,7 +114,7 @@ model Teacher {
   disabledAt DateTime? @map("disabled_at")
 
   classes  Class[]
-  userId   String  @unique
+  userId   String  
   schoolId String
   school   School  @relation(fields: [schoolId], references: [id])
 
