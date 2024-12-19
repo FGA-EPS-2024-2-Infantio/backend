@@ -4,7 +4,7 @@ import { CreateMonthlyPaymentDto } from './dtos/CreateMonthlyPayment.dto';
 
 @Controller('monthlyPayment')
 export class MonthlyPaymentController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
 
   @Post()
   async createMonthlyPayment(@Body() monthlyPaymentDto: CreateMonthlyPaymentDto) {

@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('users')
 export class UserController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
 
   @Get(':userId')
   async getUserProfile(@Param('userId') userId: string, @Req() request: Request) {
@@ -21,8 +21,9 @@ export class UserController {
         token,
       });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 }

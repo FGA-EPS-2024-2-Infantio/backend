@@ -13,8 +13,8 @@ import { TeachersService } from './teacher.service';
 @Controller()
 export class TeacherMicroserviceController {
   constructor(
-    @Inject('NATS_SERVICE') private natsClients: ClientProxy,
-    private prisma: PrismaService,
+    @Inject('NATS_SERVICE') private readonly natsClients: ClientProxy,
+    private readonly prisma: PrismaService,
     private readonly teachersService: TeachersService,
   ) {}
   @MessagePattern('createTeacher')
@@ -64,8 +64,9 @@ export class TeacherMicroserviceController {
     try {
       const response = await this.teachersService.findAll(input);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -74,8 +75,9 @@ export class TeacherMicroserviceController {
     try {
       const response = await this.teachersService.get(teacherId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -88,8 +90,9 @@ export class TeacherMicroserviceController {
         success: true,
         message: `Teacher:${input.teacherId} successfully disabled`,
       };
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -100,8 +103,9 @@ export class TeacherMicroserviceController {
     try {
       const response = await this.teachersService.update(input);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 

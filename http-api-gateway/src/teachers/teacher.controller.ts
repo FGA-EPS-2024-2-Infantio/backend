@@ -19,7 +19,7 @@ import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
 
 @Controller('teachers')
 export class TeacherController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
   @Post()
   async createTeacher(@Body() createTeacherDto: CreateTeacherDto) {
     try {
@@ -73,8 +73,9 @@ export class TeacherController {
     try {
       const response = this.natsClient.send('listTeacher', { userId: userId });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -83,8 +84,9 @@ export class TeacherController {
     try {
       const response = await this.natsClient.send('getTeacher', teacherId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -104,8 +106,9 @@ export class TeacherController {
     try {
       const response = this.natsClient.emit('disableTeacher', { teacherId: teacherId });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -114,8 +117,9 @@ export class TeacherController {
     try {
       const response = this.natsClient.emit('updateTeacher', { data: updateTeacherDto, teacherId: teacherId });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 }

@@ -8,7 +8,7 @@ import { AttendanceService } from './attendance.service';
 @Controller()
 export class AttendanceMicroserviceController {
   constructor(
-    @Inject('NATS_SERVICE') private natsClients: ClientProxy,
+    @Inject('NATS_SERVICE') private readonly natsClients: ClientProxy,
     private prisma: PrismaService,
     private readonly attendanceService: AttendanceService,
   ) {}
@@ -26,8 +26,9 @@ export class AttendanceMicroserviceController {
         data: attendance,
         message: 'Attendance created successfully',
       };
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -38,8 +39,9 @@ export class AttendanceMicroserviceController {
     try {
       const response = await this.attendanceService.findAllByClass(classId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -50,8 +52,9 @@ export class AttendanceMicroserviceController {
     try {
       const response = await this.attendanceService.findAllByStudent(studentId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -66,8 +69,9 @@ export class AttendanceMicroserviceController {
         classId,
       );
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -78,8 +82,9 @@ export class AttendanceMicroserviceController {
     try {
       const response = await this.attendanceService.getById(attendanceId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -88,8 +93,9 @@ export class AttendanceMicroserviceController {
     try {
       const response = await this.attendanceService.get();
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -100,8 +106,9 @@ export class AttendanceMicroserviceController {
     try {
       const response = await this.attendanceService.update(input);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -112,8 +119,9 @@ export class AttendanceMicroserviceController {
     try {
       const response = await this.attendanceService.updateAttendanceList(input);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 }

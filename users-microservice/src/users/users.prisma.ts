@@ -5,7 +5,7 @@ import { CreateUserDto } from './dtos/user.dto';
 
 @Injectable()
 export class UsersPrismaService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateUserDto) {
     const user = await this.prisma.user.findUnique({

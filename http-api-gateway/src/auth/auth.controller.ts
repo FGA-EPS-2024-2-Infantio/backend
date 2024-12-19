@@ -5,7 +5,7 @@ import { LoginDTO } from './dtos/auth.login';
 
 @Controller('auth')
 export class AuthController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
 
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
@@ -31,8 +31,9 @@ export class AuthController {
         token,
       });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 }
