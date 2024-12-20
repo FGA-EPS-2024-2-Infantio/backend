@@ -4,7 +4,7 @@ import { PrismaService } from '../../database/prisma.service';
 import { CreateStudentDto } from '../dtos/CreateStudent.dto';
 import { CategorieType, ClassType, TurnType } from '@prisma/client';
 
-function createMockStudent(): any {
+function createMockStudent(overrides = {}): any {
     return {
         id: 'student123',
         name: 'John Doe',
@@ -52,11 +52,11 @@ function createMockStudent(): any {
         schoolId: 'school123',
         createdAt: new Date('2024-01-01T00:00:00.000Z'),
         updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+        ...overrides,
     };
 }
 
-
-function createMockSchool(): any {
+function createMockSchool(overrides = {}): any {
     return {
         id: 'school123',
         name: 'Example School',
@@ -67,6 +67,7 @@ function createMockSchool(): any {
         directorEmail: 'director@example.com',
         userId: 'user123',
         numberStudents: 100,
+        ...overrides,
     };
 }
 

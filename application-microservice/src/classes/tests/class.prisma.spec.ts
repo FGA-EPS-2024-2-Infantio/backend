@@ -1,8 +1,79 @@
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../database/prisma.service';
 import { ClassesPrismaService } from '../class.prisma';
 import { CategorieType, ClassType, TurnType } from '@prisma/client';
+
+function createMockStudent(overrides = {}): any {
+    return {
+        id: 'student1',
+        name: 'Student 1',
+        classId: 'class123',
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+        disabled: false,
+        disabledAt: null,
+        schoolId: 'school123',
+        isFilled: true,
+        class: ClassType.BERCARIO,
+        categorie: CategorieType.PARCIAL,
+        turn: TurnType.MATUTINO,
+        dataNascimento: '2010-01-01',
+        naturalidadeAluno: 'São Paulo',
+        endereco: 'Rua Exemplo, 123',
+        cep: '12345-678',
+        mae: JSON.stringify({
+            nome: 'Maria Silva',
+            telefone: '111111111',
+        }),
+        pai: JSON.stringify({
+            nome: 'José Silva',
+            telefone: '222222222',
+        }),
+        responsaveis: JSON.stringify([
+            { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
+        ]),
+        observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
+        observacoesMedicas: JSON.stringify({
+            alergias: 'Amendoim',
+        }),
+        payments: [],
+        ...overrides,
+    };
+}
+
+function createMockClass(overrides = {}): any {
+    return {
+        id: 'class123',
+        name: 'Math Class',
+        teacher: { id: 'teacher123', name: 'John Doe' },
+        teacherId: 'teacher123',
+        schoolId: 'school123',
+        students: [
+            createMockStudent(),
+            createMockStudent({ id: 'student2', name: 'Student 2' }),
+        ],
+        disabled: false,
+        disabledAt: null,
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+        ...overrides,
+    };
+}
+
+function createMockSchool(overrides = {}): any {
+    return {
+        id: 'school123',
+        userId: 'user123',
+        name: 'Example School',
+        directorEmail: 'director@example.com',
+        numberStudents: 100,
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+        disabled: false,
+        disabledAt: null,
+        ...overrides,
+    };
+}
 
 describe('ClassesPrismaService', () => {
     let classesPrismaService: ClassesPrismaService;
@@ -41,36 +112,8 @@ describe('ClassesPrismaService', () => {
                 userId: 'user123',
             };
 
-            const mockSchool = {
-                id: 'school123',
-                userId: 'user123',
-                name: 'Example School',
-                directorEmail: 'director@example.com',
-                numberStudents: 100,
-                createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                updatedAt: new Date('2024-01-01T00:00:00.000Z'),
-                disabled: false,
-                disabledAt: null,
-            };
-
-            const mockClass = {
-                id: 'class123',
-                name: 'Math Class',
-                teacher: {
-                    id: 'teacher123',
-                    name: 'John Doe',
-                },
-                teacherId: 'teacher123',
-                schoolId: 'school123',
-                students: [
-                    { id: 'student1', name: 'Student 1' },
-                    { id: 'student2', name: 'Student 2' },
-                ],
-                disabled: false,
-                disabledAt: null,
-                createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-            };
+            const mockSchool = createMockSchool();
+            const mockClass = createMockClass();
 
             jest.spyOn(prismaService.school, 'findUnique').mockResolvedValue(mockSchool);
             jest.spyOn(prismaService.class, 'create').mockResolvedValue(mockClass);
@@ -110,78 +153,11 @@ describe('ClassesPrismaService', () => {
         });
     });
 
-
     describe('findStudentsByClass', () => {
         it('should return students by class ID', async () => {
             const mockStudents = [
-                {
-                    id: 'student1',
-                    name: 'Student 1',
-                    classId: 'class123',
-                    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                    updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-                    disabled: false,
-                    disabledAt: null,
-                    schoolId: 'school123',
-                    isFilled: true,
-                    class: ClassType.BERCARIO,
-                    categorie: CategorieType.PARCIAL,
-                    turn: TurnType.MATUTINO,
-                    dataNascimento: '2010-01-01',
-                    naturalidadeAluno: 'São Paulo',
-                    endereco: 'Rua Exemplo, 123',
-                    cep: '12345-678',
-                    mae: JSON.stringify({
-                        nome: 'Maria Silva',
-                        telefone: '111111111',
-                    }),
-                    pai: JSON.stringify({
-                        nome: 'José Silva',
-                        telefone: '222222222',
-                    }),
-                    responsaveis: JSON.stringify([
-                        { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
-                    ]),
-                    observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
-                    observacoesMedicas: JSON.stringify({
-                        alergias: 'Amendoim',
-                    }),
-                    payments: [],
-                },
-                {
-                    id: 'student2',
-                    name: 'Student 2',
-                    classId: 'class123',
-                    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                    updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-                    disabled: false,
-                    disabledAt: null,
-                    schoolId: 'school123',
-                    isFilled: true,
-                    class: ClassType.BERCARIO,
-                    categorie: CategorieType.PARCIAL,
-                    turn: TurnType.MATUTINO,
-                    dataNascimento: '2010-01-01',
-                    naturalidadeAluno: 'São Paulo',
-                    endereco: 'Rua Exemplo, 123',
-                    cep: '12345-678',
-                    mae: JSON.stringify({
-                        nome: 'Maria Silva',
-                        telefone: '111111111',
-                    }),
-                    pai: JSON.stringify({
-                        nome: 'José Silva',
-                        telefone: '222222222',
-                    }),
-                    responsaveis: JSON.stringify([
-                        { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
-                    ]),
-                    observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
-                    observacoesMedicas: JSON.stringify({
-                        alergias: 'Amendoim',
-                    }),
-                    payments: [],
-                },
+                createMockStudent(),
+                createMockStudent({ id: 'student2', name: 'Student 2' }),
             ];
 
             jest.spyOn(prismaService.student, 'findMany').mockResolvedValue(mockStudents);

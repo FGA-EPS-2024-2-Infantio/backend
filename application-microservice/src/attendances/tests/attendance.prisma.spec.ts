@@ -1,8 +1,20 @@
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { AttendancePrismaService } from '../attendance.prisma';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateAttendanceDto } from '../dtos/CreateAttendance.dto';
+
+function createMockAttendance(overrides = {}): any {
+    return {
+        id: 'attendance123',
+        studentId: 'student123',
+        classId: 'class123',
+        date: new Date('2024-01-01T00:00:00.000Z'),
+        hasAttended: true,
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+        ...overrides,
+    };
+}
 
 describe('AttendancePrismaService', () => {
     let attendancePrismaService: AttendancePrismaService;
@@ -41,12 +53,7 @@ describe('AttendancePrismaService', () => {
                 hasAttended: true,
             };
 
-            const mockAttendance = {
-                id: 'attendance123',
-                ...createAttendanceDto,
-                createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                updatedAt: new Date('2024-01-01T00:00:00.000Z'),
-            };
+            const mockAttendance = createMockAttendance();
 
             jest.spyOn(prismaService.attendance, 'create').mockResolvedValue(mockAttendance);
 
@@ -61,21 +68,9 @@ describe('AttendancePrismaService', () => {
 
     describe('findAttendanceByClass', () => {
         it('should find attendance by class ID', async () => {
-            const mockAttendance: any[] = [
-                {
-                    id: '1',
-                    studentId: 'student1',
-                    classId: 'class1',
-                    date: new Date('2024-12-20T00:00:00.000Z'),
-                    hasAttended: true,
-                },
-                {
-                    id: '2',
-                    studentId: 'student2',
-                    classId: 'class1',
-                    date: new Date('2024-12-21T00:00:00.000Z'),
-                    hasAttended: false,
-                },
+            const mockAttendance = [
+                createMockAttendance({ id: '1', studentId: 'student1', classId: 'class1', date: new Date('2024-12-20T00:00:00.000Z'), hasAttended: true }),
+                createMockAttendance({ id: '2', studentId: 'student2', classId: 'class1', date: new Date('2024-12-21T00:00:00.000Z'), hasAttended: false }),
             ];
 
             jest.spyOn(prismaService.attendance, 'findMany').mockResolvedValue(mockAttendance);
@@ -92,7 +87,6 @@ describe('AttendancePrismaService', () => {
                     date: true,
                     classId: true,
                     hasAttended: true,
-
                 },
             });
         });
@@ -100,17 +94,15 @@ describe('AttendancePrismaService', () => {
 
     describe('findAttendanceByStudent', () => {
         it('should find attendance by student ID', async () => {
-            const mockAttendance: any[] = [
-                {
+            const mockAttendance = [
+                createMockAttendance({
                     id: 'attendance124',
                     studentId: 'student124',
                     student: { name: 'Jane Doe' },
                     date: new Date('2024-01-02T00:00:00.000Z'),
                     classId: 'class123',
                     hasAttended: false,
-                    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
-                },
+                }),
             ];
 
             jest.spyOn(prismaService.attendance, 'findMany').mockResolvedValue(mockAttendance);
@@ -133,17 +125,15 @@ describe('AttendancePrismaService', () => {
 
     describe('findAttendanceByDateAndClass', () => {
         it('should find attendance by date and class ID', async () => {
-            const mockAttendance: any[] = [
-                {
+            const mockAttendance = [
+                createMockAttendance({
                     id: 'attendance124',
                     studentId: 'student124',
                     student: { name: 'Jane Doe' },
                     date: new Date('2024-01-02T00:00:00.000Z'),
                     classId: 'class123',
                     hasAttended: false,
-                    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
-                },
+                }),
             ];
 
             jest.spyOn(prismaService.attendance, 'findMany').mockResolvedValue(mockAttendance);
