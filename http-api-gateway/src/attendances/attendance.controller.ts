@@ -5,7 +5,7 @@ import { CreateAttendanceDto } from './dtos/CreateAttendance.dto';
 
 @Controller('attendances')
 export class AttendanceController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
   @Post()
   async createAttendance(@Body() createAttendanceDto: CreateAttendanceDto[]) {
     try {
@@ -21,8 +21,9 @@ export class AttendanceController {
     try {
       const response = this.natsClient.send('listAttendance', {});
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -31,8 +32,9 @@ export class AttendanceController {
     try {
       const response = this.natsClient.send('listAttendanceByClassId', classId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -41,8 +43,9 @@ export class AttendanceController {
     try {
       const response = this.natsClient.send('listAttendanceByStudentId', studentId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -51,8 +54,9 @@ export class AttendanceController {
     try {
       const response = this.natsClient.send('listAttendanceByDate', { date, classId });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -61,8 +65,9 @@ export class AttendanceController {
     try {
       const response = this.natsClient.send('getAttendanceById', attendanceId);
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -77,8 +82,9 @@ export class AttendanceController {
         attendanceId: attendanceId,
       });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 
@@ -87,8 +93,9 @@ export class AttendanceController {
     try {
       const response = await this.natsClient.emit('updateList', { attendanceList: updateAttendanceDto });
       return response;
-    } catch (error) {
-      throw error;
+    } catch (ex) {
+      console.error(ex);
+      throw ex;
     }
   }
 }

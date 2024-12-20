@@ -16,7 +16,7 @@ import { CreateClassDto } from './dtos/CreateClass.dto';
 
 @Controller('classes')
 export class ClassController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
 
   @Post()
   async createClass(@Body() createClassDto: CreateClassDto) {

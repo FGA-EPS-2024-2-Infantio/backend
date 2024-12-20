@@ -5,7 +5,7 @@ import { CreateSchoolDto } from './dtos/CreateSchool.dto';
 
 @Controller('schools')
 export class SchoolsController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
   @Post()
   async createSchool(@Body() createSchoolDto: CreateSchoolDto) {
     const user = await firstValueFrom(
