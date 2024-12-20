@@ -5,10 +5,11 @@ import {
   MessagePattern,
   Payload,
 } from '@nestjs/microservices';
-import { PrismaService } from 'src/database/prisma.service';
+
 import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
 import { TeacherResponseDto } from './dtos/TeacherResponse.dto';
 import { TeachersService } from './teacher.service';
+import { PrismaService } from '../database/prisma.service';
 
 @Controller()
 export class TeacherMicroserviceController {

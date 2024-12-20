@@ -18,9 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:migrate": "docker-compose exec application_microservice yarn prisma migrate dev",
-    "docker:reset": "docker-compose exec application_microservice yarn prisma migrate reset",
-    "docker:studio": "docker-compose exec application_microservice yarn prisma studio --port 5556"
+    "docker:migrate": "sudo docker-compose exec application_microservice yarn prisma migrate dev",
+    "docker:reset": "sudo docker-compose exec application_microservice yarn prisma migrate reset",
+    "docker:studio": "sudo docker-compose exec application_microservice yarn prisma studio --port 5556",
+    "db:seed-school": "ts-node --transpile-only prisma/seed/seedSchool.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

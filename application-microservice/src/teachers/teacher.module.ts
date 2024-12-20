@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../database/prisma.module';
-import { NatsClientModule } from 'src/nats-client/nats-client.module';
+import { NatsClientModule } from '../nats-client/nats-client.module';
 import { TeacherMicroserviceController } from './teacher.controller';
 import { TeachersPrismaService } from './teacher.prisma';
 import { TeachersService } from './teacher.service';
