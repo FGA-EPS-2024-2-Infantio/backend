@@ -1,6 +1,6 @@
 import { Controller, Inject } from '@nestjs/common';
 import { ClientProxy, Payload, MessagePattern } from '@nestjs/microservices';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../database/prisma.service';
 import { CreateAttendanceDto } from './dtos/CreateAttendance.dto';
 import { AttendanceResponseDto } from './dtos/AttendanceResponse.dto';
 import { AttendanceService } from './attendance.service';
@@ -11,7 +11,7 @@ export class AttendanceMicroserviceController {
     @Inject('NATS_SERVICE') private natsClients: ClientProxy,
     private prisma: PrismaService,
     private readonly attendanceService: AttendanceService,
-  ) {}
+  ) { }
   @MessagePattern('createAttendance')
   async createAttendance(
     @Payload() createAttendanceDto: CreateAttendanceDto[],
