@@ -9,8 +9,8 @@ import { RefreshJwtGuard } from './guards/refresh.guard';
 @Controller()
 export class AuthMicroserviceController {
   constructor(
-    private usersService: UsersService,
-    private authService: AuthService,
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
   ) {}
 
   @MessagePattern('registerUser')

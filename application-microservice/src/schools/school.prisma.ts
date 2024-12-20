@@ -5,7 +5,7 @@ import { SchoolResponseDto } from './dtos/SchoolResponse.dto';
 
 @Injectable()
 export class SchoolsPrismaService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(data: CreateSchoolDto) {
     return await this.prisma.school.create({ data });

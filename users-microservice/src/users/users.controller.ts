@@ -5,7 +5,7 @@ import { UsersService } from 'src/users/users.service';
 
 @Controller()
 export class UsersMicroserviceController {
-  constructor(private usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @MessagePattern('getUserProfile')
   @UseGuards(JwtGuard)

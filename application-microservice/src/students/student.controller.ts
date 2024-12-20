@@ -7,7 +7,7 @@ import { StudentsService } from './student.service';
 @Controller()
 export class StudentMicroserviceController {
   constructor(
-    @Inject('NATS_SERVICE') private natsClients: ClientProxy,
+    @Inject('NATS_SERVICE') private readonly natsClients: ClientProxy,
     private readonly studentService: StudentsService,
   ) {}
 

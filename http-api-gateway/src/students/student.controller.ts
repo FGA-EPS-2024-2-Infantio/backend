@@ -5,7 +5,7 @@ import { CreateStudentDto } from './dtos/CreateStudent.dto';
 
 @Controller('students')
 export class StudentsController {
-  constructor(@Inject('NATS_SERVICE') private natsClient: ClientProxy) {}
+  constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
 
   @Post()
   async createStudent(@Body() createStudentDto: CreateStudentDto) {

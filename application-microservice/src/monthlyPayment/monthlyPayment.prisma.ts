@@ -5,7 +5,7 @@ import { MonthlyPaymentResponseDto } from './dtos/MonthlyPayment.dto';
 
 @Injectable()
 export class MonthlyPaymentPrismaService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(data: CreateMonthlyPaymentDto) {
     return await this.prisma.monthlyPayment.create({ data });

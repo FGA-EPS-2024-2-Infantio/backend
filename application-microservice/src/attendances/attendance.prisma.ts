@@ -6,7 +6,7 @@ import { AttendanceResponseDto } from './dtos/AttendanceResponse.dto';
 
 @Injectable()
 export class AttendancePrismaService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) { }
 
   async createAttendance(data: CreateAttendanceDto) {
     return await this.prisma.attendance.create({ data });
