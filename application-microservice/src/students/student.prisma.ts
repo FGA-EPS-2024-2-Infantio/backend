@@ -87,9 +87,7 @@ export class StudentsPrismaService {
       ],
     });
 
-    console.log(students);
 
-    // Mapeie os resultados para o tipo StudentResponseDto
     return students.map((student) => this.mapToStudentResponseDto(student));
   }
 

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SchoolsService } from '../school.service';
 import { SchoolsPrismaService } from '../school.prisma';
-import { CreateSchoolDto } from '../dtos/CreateStudent.dto';
+import { CreateSchoolDto } from '../dtos/CreateSchool.dto';
 
 
 describe('SchoolsService', () => {

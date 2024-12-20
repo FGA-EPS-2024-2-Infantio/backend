@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
-import { CreateSchoolDto } from './dtos/CreateStudent.dto';
+import { CreateSchoolDto } from './dtos/CreateSchool.dto';
 import { SchoolResponseDto } from './dtos/SchoolResponse.dto';
 
 @Injectable()
 export class SchoolsPrismaService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(data: CreateSchoolDto) {
     return await this.prisma.school.create({ data });
