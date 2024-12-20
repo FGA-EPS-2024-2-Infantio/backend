@@ -16,11 +16,17 @@ import {
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { CreateTeacherDto } from './dtos/CreateTeacher.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Teachers')
 @Controller('teachers')
 export class TeacherController {
   constructor(@Inject('NATS_SERVICE') private readonly natsClient: ClientProxy) {}
+
   @Post()
+  @ApiOperation({ summary: 'Criar um novo professor.' })
+  @ApiResponse({ status: 201, description: 'Professor criado com sucesso.' })
+  @ApiResponse({ status: 400, description: 'Erro ao criar professor.' })
   async createTeacher(@Body() createTeacherDto: CreateTeacherDto) {
     try {
       const user = await firstValueFrom(
@@ -69,6 +75,9 @@ export class TeacherController {
   }
 
   @Get(':userId/list')
+  @ApiOperation({ summary: 'Listar todos os professores associados a um usuário.' })
+  @ApiResponse({ status: 200, description: 'Lista de professores.' })
+  @ApiResponse({ status: 400, description: 'Erro ao listar professores.' })
   async listTeacher(@Param('userId') userId: string) {
     try {
       const response = this.natsClient.send('listTeacher', { userId: userId });
@@ -80,6 +89,9 @@ export class TeacherController {
   }
 
   @Get(':teacherId')
+  @ApiOperation({ summary: 'Obter detalhes de um professor.' })
+  @ApiResponse({ status: 200, description: 'Detalhes do professor.' })
+  @ApiResponse({ status: 400, description: 'Erro ao obter professor.' })
   async getTeacher(@Param('teacherId') teacherId: string) {
     try {
       const response = await this.natsClient.send('getTeacher', teacherId);
@@ -91,6 +103,9 @@ export class TeacherController {
   }
 
   @Get(':teacherId/classes')
+  @ApiOperation({ summary: 'Obter as turmas de um professor.' })
+  @ApiResponse({ status: 200, description: 'Turmas do professor.' })
+  @ApiResponse({ status: 400, description: 'Erro ao obter turmas do professor.' })
   async getTeacherClasses(@Param('teacherId') teacherId: string) {
     try {
       const response = await lastValueFrom(this.natsClient.send('getTeacherClasses', teacherId));
@@ -102,6 +117,9 @@ export class TeacherController {
 
   @Delete(':teacherId')
   @HttpCode(200)
+  @ApiOperation({ summary: 'Desabilitar um professor.' })
+  @ApiResponse({ status: 200, description: 'Professor desabilitado com sucesso.' })
+  @ApiResponse({ status: 400, description: 'Erro ao desabilitar professor.' })
   async disableTeacher(@Param('teacherId') teacherId: string) {
     try {
       const response = this.natsClient.emit('disableTeacher', { teacherId: teacherId });
@@ -113,6 +131,9 @@ export class TeacherController {
   }
 
   @Patch(':teacherId')
+  @ApiOperation({ summary: 'Atualizar os dados de um professor.' })
+  @ApiResponse({ status: 200, description: 'Professor atualizado com sucesso.' })
+  @ApiResponse({ status: 400, description: 'Erro ao atualizar professor.' })
   async updateTeacher(@Param('teacherId') teacherId: string, @Body() updateTeacherDto: CreateTeacherDto) {
     try {
       const response = this.natsClient.emit('updateTeacher', { data: updateTeacherDto, teacherId: teacherId });
