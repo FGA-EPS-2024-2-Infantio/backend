@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { CreateMonthlyPaymentDto } from './dtos/CreateMonthlyPayment.dto';
-import { MonthlyPaymentMicroserviceController } from './monthlyPayment.controller';
-import { MonthlyPaymentService } from './monthlyPayment.service';
-import { StudentsService } from '../students/student.service';
+import { MonthlyPaymentMicroserviceController } from '../monthlyPayment.controller';
+import { MonthlyPaymentService } from '../monthlyPayment.service';
+import { StudentsService } from '../../students/student.service';
+import { CreateMonthlyPaymentDto } from '../dtos/CreateMonthlyPayment.dto';
 
 describe('MonthlyPaymentController', () => {
   let controller: MonthlyPaymentMicroserviceController;

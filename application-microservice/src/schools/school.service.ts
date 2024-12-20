@@ -1,6 +1,6 @@
 // src/modules/schools/services/schools.service.ts
 import { Injectable } from '@nestjs/common';
-import { CreateSchoolDto } from './dtos/CreateStudent.dto';
+import { CreateSchoolDto } from './dtos/CreateSchool.dto';
 import { SchoolsPrismaService } from './school.prisma';
 import { SchoolResponseDto } from './dtos/SchoolResponse.dto';
 

@@ -1,12 +1,12 @@
 // src/modules/schools/prisma/schools.prisma.ts
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from '../database/prisma.service';
 import { CreateAttendanceDto } from './dtos/CreateAttendance.dto';
 import { AttendanceResponseDto } from './dtos/AttendanceResponse.dto';
 
 @Injectable()
 export class AttendancePrismaService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async createAttendance(data: CreateAttendanceDto) {
     return await this.prisma.attendance.create({ data });

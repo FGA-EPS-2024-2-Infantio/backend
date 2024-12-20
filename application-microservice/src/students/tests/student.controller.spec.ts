@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
-import { CreateStudentDto } from './dtos/CreateStudent.dto';
-import { StudentMicroserviceController } from './student.controller';
-import { StudentsService } from './student.service';
+import { CreateStudentDto } from '../dtos/CreateStudent.dto';
+import { StudentMicroserviceController } from '../student.controller';
+import { StudentsService } from '../student.service';
 
 describe('StudentsController', () => {
   let studentsController: StudentMicroserviceController;

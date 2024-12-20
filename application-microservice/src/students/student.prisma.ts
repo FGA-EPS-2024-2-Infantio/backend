@@ -5,7 +5,7 @@ import { StudentResponseDto } from './dtos/StudentResponse.dto';
 
 @Injectable()
 export class StudentsPrismaService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   async create(data: CreateStudentDto): Promise<StudentResponseDto> {
     const { userId, ...filteredData } = data;
@@ -16,7 +16,6 @@ export class StudentsPrismaService {
       },
     });
 
-    console.log('BBBBBBBBBBBBBBBB', school);
 
     const student = await this.prisma.student.create({
       data: {
@@ -88,9 +87,7 @@ export class StudentsPrismaService {
       ],
     });
 
-    console.log(students);
 
-    // Mapeie os resultados para o tipo StudentResponseDto
     return students.map((student) => this.mapToStudentResponseDto(student));
   }
 
