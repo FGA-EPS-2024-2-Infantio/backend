@@ -7,25 +7,21 @@ describe('ClassesService', () => {
     let classesService: ClassesService;
     let mockClassesPrismaService: Partial<ClassesPrismaService>;
 
+    const classMock = {
+        id: '1',
+        name: 'Class Name',
+        teacherId: 'teacher123',
+        userId: 'user123',
+        disabled: false,
+    }
+
     beforeEach(async () => {
         mockClassesPrismaService = {
-            create: jest.fn().mockResolvedValue({
-                id: '1',
-                name: 'Class Name',
-                teacherId: 'teacher123',
-                userId: 'user123',
-                disabled: false,
-            }),
+            create: jest.fn().mockResolvedValue(classMock),
             findAll: jest.fn().mockResolvedValue([
-                { id: '1', name: 'Class Name', teacherId: 'teacher123', userId: 'user123', disabled: false },
+                classMock,
             ]),
-            get: jest.fn().mockResolvedValue({
-                id: '1',
-                name: 'Class Name',
-                teacherId: 'teacher123',
-                userId: 'user123',
-                disabled: false,
-            }),
+            get: jest.fn().mockResolvedValue(classMock),
             disable: jest.fn().mockResolvedValue({
                 id: '1',
                 name: 'Class Name',
@@ -40,13 +36,7 @@ describe('ClassesService', () => {
                 userId: 'user123',
                 disabled: false,
             }),
-            updateStudents: jest.fn().mockResolvedValue({
-                id: '1',
-                name: 'Class Name',
-                teacherId: 'teacher123',
-                userId: 'user123',
-                disabled: false,
-            }),
+            updateStudents: jest.fn().mockResolvedValue(classMock),
             findStudentsByClass: jest.fn().mockResolvedValue([
                 { id: '1', name: 'Student 1', classId: '1' },
             ]),

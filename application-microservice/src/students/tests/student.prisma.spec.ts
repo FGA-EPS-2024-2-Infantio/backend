@@ -4,72 +4,70 @@ import { PrismaService } from '../../database/prisma.service';
 import { CreateStudentDto } from '../dtos/CreateStudent.dto';
 import { CategorieType, ClassType, TurnType } from '@prisma/client';
 
-function createMockStudent(overrides = {}): any {
-    return {
-        id: 'student123',
-        name: 'John Doe',
-        isFilled: true,
-        categorie: CategorieType.PARCIAL,
-        class: ClassType.BERCARIO,
-        turn: TurnType.MATUTINO,
-        dataNascimento: '2010-01-01',
-        naturalidadeAluno: 'São Paulo',
-        endereco: 'Rua Exemplo, 123',
-        cep: '12345-678',
-        mae: JSON.stringify({
-            nome: 'Maria Silva',
-            telefone: '111111111',
-            cpf: '12345678901',
-            rg: '1234567',
-            naturalidade: 'São Paulo',
-        }),
-        pai: JSON.stringify({
-            nome: 'José Silva',
-            telefone: '222222222',
-            cpf: '98765432100',
-            rg: '7654321',
-            naturalidade: 'Rio de Janeiro',
-        }),
-        responsaveis: JSON.stringify([
-            { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
-        ]),
-        observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
-        observacoesMedicas: JSON.stringify({
-            hospital: 'Hospital Exemplo',
-            telefoneHospital: '444444444',
-            medico: 'Dr. Fulano',
-            telefoneMedico: '555555555',
-            enderecoHospital: 'Av. Saúde, 123',
-            possuiConvenio: true,
-            alergias: 'Amendoim',
-            medicamentosFebre: 'Paracetamol',
-            medicamentosVomito: 'Dramin',
-            observacoesGerais: 'Nenhuma',
-        }),
-        disabled: false,
-        disabledAt: null,
-        payments: [],
-        schoolId: 'school123',
-        createdAt: new Date('2024-01-01T00:00:00.000Z'),
-        updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-        ...overrides,
-    };
+function createMockEntity(base: any, overrides = {}): any {
+    return { ...base, ...overrides };
 }
 
-function createMockSchool(overrides = {}): any {
-    return {
-        id: 'school123',
-        name: 'Example School',
-        createdAt: new Date('2024-01-01T00:00:00.000Z'),
-        updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-        disabled: false,
-        disabledAt: null,
-        directorEmail: 'director@example.com',
-        userId: 'user123',
-        numberStudents: 100,
-        ...overrides,
-    };
-}
+const baseStudent = {
+    id: 'student123',
+    name: 'John Doe',
+    isFilled: true,
+    categorie: CategorieType.PARCIAL,
+    class: ClassType.BERCARIO,
+    turn: TurnType.MATUTINO,
+    dataNascimento: '2010-01-01',
+    naturalidadeAluno: 'São Paulo',
+    endereco: 'Rua Exemplo, 123',
+    cep: '12345-678',
+    mae: JSON.stringify({
+        nome: 'Maria Silva',
+        telefone: '111111111',
+        cpf: '12345678901',
+        rg: '1234567',
+        naturalidade: 'São Paulo',
+    }),
+    pai: JSON.stringify({
+        nome: 'José Silva',
+        telefone: '222222222',
+        cpf: '98765432100',
+        rg: '7654321',
+        naturalidade: 'Rio de Janeiro',
+    }),
+    responsaveis: JSON.stringify([
+        { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
+    ]),
+    observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
+    observacoesMedicas: JSON.stringify({
+        hospital: 'Hospital Exemplo',
+        telefoneHospital: '444444444',
+        medico: 'Dr. Fulano',
+        telefoneMedico: '555555555',
+        enderecoHospital: 'Av. Saúde, 123',
+        possuiConvenio: true,
+        alergias: 'Amendoim',
+        medicamentosFebre: 'Paracetamol',
+        medicamentosVomito: 'Dramin',
+        observacoesGerais: 'Nenhuma',
+    }),
+    disabled: false,
+    disabledAt: null,
+    payments: [],
+    schoolId: 'school123',
+    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+};
+
+const baseSchool = {
+    id: 'school123',
+    name: 'Example School',
+    createdAt: new Date('2024-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+    disabled: false,
+    disabledAt: null,
+    directorEmail: 'director@example.com',
+    userId: 'user123',
+    numberStudents: 100,
+};
 
 async function setupTestingModule(): Promise<TestingModule> {
     return Test.createTestingModule({
@@ -102,8 +100,8 @@ describe('StudentsPrismaService', () => {
         studentsPrismaService = module.get<StudentsPrismaService>(StudentsPrismaService);
         prismaService = module.get<PrismaService>(PrismaService);
 
-        jest.spyOn(prismaService.school, 'findUnique').mockResolvedValue(createMockSchool());
-        jest.spyOn(prismaService.student, 'create').mockResolvedValue(createMockStudent());
+        jest.spyOn(prismaService.school, 'findUnique').mockResolvedValue(createMockEntity(baseSchool));
+        jest.spyOn(prismaService.student, 'create').mockResolvedValue(createMockEntity(baseStudent));
     });
 
     describe('create', () => {
@@ -173,7 +171,7 @@ describe('StudentsPrismaService', () => {
 
     describe('findAll', () => {
         it('should return all students for a given userId', async () => {
-            jest.spyOn(prismaService.student, 'findMany').mockResolvedValue([createMockStudent()]);
+            jest.spyOn(prismaService.student, 'findMany').mockResolvedValue([createMockEntity(baseStudent)]);
 
             const result = await studentsPrismaService.findAll({ userId: 'user123' });
 
@@ -190,7 +188,7 @@ describe('StudentsPrismaService', () => {
 
     describe('get', () => {
         it('should return a student by ID', async () => {
-            jest.spyOn(prismaService.student, 'findUnique').mockResolvedValue(createMockStudent());
+            jest.spyOn(prismaService.student, 'findUnique').mockResolvedValue(createMockEntity(baseStudent));
 
             const result = await studentsPrismaService.get('student123');
 
