@@ -66,20 +66,22 @@ describe('SchoolsPrismaService', () => {
         });
     });
 
+    const school = {
+        id: 'school123',
+        name: 'Example School',
+        directorEmail: 'director@example.com',
+        numberStudents: 100,
+        userId: 'user123',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        disabled: false,
+        disabledAt: null,
+    }
+
     describe('findAll', () => {
         it('should return all schools', async () => {
             const mockSchools = [
-                {
-                    id: 'school123',
-                    name: 'Example School',
-                    directorEmail: 'director@example.com',
-                    numberStudents: 100,
-                    userId: 'user123',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    disabled: false,
-                    disabledAt: null,
-                },
+                school
             ];
 
             jest.spyOn(prismaService.school, 'findMany').mockResolvedValue(mockSchools);
@@ -98,17 +100,7 @@ describe('SchoolsPrismaService', () => {
 
     describe('get', () => {
         it('should return a school by ID', async () => {
-            const mockSchool = {
-                id: 'school123',
-                name: 'Example School',
-                directorEmail: 'director@example.com',
-                numberStudents: 100,
-                userId: 'user123',
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                disabled: false,
-                disabledAt: null,
-            };
+            const mockSchool = school
 
             jest.spyOn(prismaService.school, 'findUnique').mockResolvedValue(mockSchool);
 
