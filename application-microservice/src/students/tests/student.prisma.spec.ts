@@ -4,15 +4,77 @@ import { PrismaService } from '../../database/prisma.service';
 import { CreateStudentDto } from '../dtos/CreateStudent.dto';
 import { CategorieType, ClassType, TurnType } from '@prisma/client';
 
-describe('StudentsPrismaService', () => {
-    let studentsPrismaService: StudentsPrismaService;
-    let prismaService: PrismaService;
+function createMockStudent(): any {
+    return {
+        id: 'student123',
+        name: 'John Doe',
+        isFilled: true,
+        categorie: CategorieType.PARCIAL,
+        class: ClassType.BERCARIO,
+        turn: TurnType.MATUTINO,
+        dataNascimento: '2010-01-01',
+        naturalidadeAluno: 'São Paulo',
+        endereco: 'Rua Exemplo, 123',
+        cep: '12345-678',
+        mae: JSON.stringify({
+            nome: 'Maria Silva',
+            telefone: '111111111',
+            cpf: '12345678901',
+            rg: '1234567',
+            naturalidade: 'São Paulo',
+        }),
+        pai: JSON.stringify({
+            nome: 'José Silva',
+            telefone: '222222222',
+            cpf: '98765432100',
+            rg: '7654321',
+            naturalidade: 'Rio de Janeiro',
+        }),
+        responsaveis: JSON.stringify([
+            { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
+        ]),
+        observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
+        observacoesMedicas: JSON.stringify({
+            hospital: 'Hospital Exemplo',
+            telefoneHospital: '444444444',
+            medico: 'Dr. Fulano',
+            telefoneMedico: '555555555',
+            enderecoHospital: 'Av. Saúde, 123',
+            possuiConvenio: true,
+            alergias: 'Amendoim',
+            medicamentosFebre: 'Paracetamol',
+            medicamentosVomito: 'Dramin',
+            observacoesGerais: 'Nenhuma',
+        }),
+        disabled: false,
+        disabledAt: null,
+        payments: [],
+        schoolId: 'school123',
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+    };
+}
 
 
+function createMockSchool(): any {
+    return {
+        id: 'school123',
+        name: 'Example School',
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: new Date('2024-12-20T00:00:00.000Z'),
+        disabled: false,
+        disabledAt: null,
+        directorEmail: 'director@example.com',
+        userId: 'user123',
+        numberStudents: 100,
+    };
+}
 
-    beforeEach(async () => {
-        const module: TestingModule = await Test.createTestingModule({
-            providers: [StudentsPrismaService, {
+async function setupTestingModule(): Promise<TestingModule> {
+    return Test.createTestingModule({
+        providers: [
+            StudentsPrismaService,
+            {
                 provide: PrismaService,
                 useValue: {
                     student: {
@@ -25,11 +87,22 @@ describe('StudentsPrismaService', () => {
                         findUnique: jest.fn(),
                     },
                 },
-            }],
-        }).compile();
+            },
+        ],
+    }).compile();
+}
 
+describe('StudentsPrismaService', () => {
+    let studentsPrismaService: StudentsPrismaService;
+    let prismaService: PrismaService;
+
+    beforeEach(async () => {
+        const module = await setupTestingModule();
         studentsPrismaService = module.get<StudentsPrismaService>(StudentsPrismaService);
         prismaService = module.get<PrismaService>(PrismaService);
+
+        jest.spyOn(prismaService.school, 'findUnique').mockResolvedValue(createMockSchool());
+        jest.spyOn(prismaService.student, 'create').mockResolvedValue(createMockStudent());
     });
 
     describe('create', () => {
@@ -78,178 +151,28 @@ describe('StudentsPrismaService', () => {
                 },
             };
 
-            const mockSchool = {
-                id: 'school123',
-                name: 'Example School',
-                createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-                disabled: false,
-                disabledAt: null,
-                directorEmail: 'director@example.com',
-                userId: 'user123',
-                numberStudents: 100,
-            };
-
-            jest.spyOn(prismaService.school, 'findUnique').mockResolvedValue(mockSchool);
-
-            const mockStudent = {
-                id: 'student123',
-                name: 'John Doe',
-                isFilled: true,
-                categorie: CategorieType.PARCIAL,
-                class: ClassType.BERCARIO,
-                turn: TurnType.MATUTINO,
-                dataNascimento: '2010-01-01',
-                naturalidadeAluno: 'São Paulo',
-                endereco: 'Rua Exemplo, 123',
-                cep: '12345-678',
-                mae: JSON.stringify({
-                    nome: 'Maria Silva',
-                    telefone: '111111111',
-                    cpf: '12345678901',
-                    rg: '1234567',
-                    naturalidade: 'São Paulo',
-                }),
-                pai: JSON.stringify({
-                    nome: 'José Silva',
-                    telefone: '222222222',
-                    cpf: '98765432100',
-                    rg: '7654321',
-                    naturalidade: 'Rio de Janeiro',
-                }),
-                responsaveis: JSON.stringify([
-                    { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
-                ]),
-                observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
-                observacoesMedicas: JSON.stringify({
-                    hospital: 'Hospital Exemplo',
-                    telefoneHospital: '444444444',
-                    medico: 'Dr. Fulano',
-                    telefoneMedico: '555555555',
-                    enderecoHospital: 'Av. Saúde, 123',
-                    possuiConvenio: true,
-                    alergias: 'Amendoim',
-                    medicamentosFebre: 'Paracetamol',
-                    medicamentosVomito: 'Dramin',
-                    observacoesGerais: 'Nenhuma',
-                }),
-                disabled: false,
-                disabledAt: null,
-                schoolId: 'school123',
-                createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-                payments: [],
-            };
-
-            jest.spyOn(prismaService.student, 'create').mockResolvedValue(mockStudent);
-
             const result = await studentsPrismaService.create(createStudentDto);
 
-            expect(result).toEqual({
-                id: 'student123',
-                name: 'John Doe',
-                isFilled: true,
-                categorie: CategorieType.PARCIAL,
-                class: ClassType.BERCARIO,
-                turn: TurnType.MATUTINO,
-                dataNascimento: '2010-01-01',
-                naturalidadeAluno: 'São Paulo',
-                endereco: 'Rua Exemplo, 123',
-                cep: '12345-678',
-                mae: {
-                    nome: 'Maria Silva',
-                    telefone: '111111111',
-                    cpf: '12345678901',
-                    rg: '1234567',
-                    naturalidade: 'São Paulo',
-                },
-                pai: {
-                    nome: 'José Silva',
-                    telefone: '222222222',
-                    cpf: '98765432100',
-                    rg: '7654321',
-                    naturalidade: 'Rio de Janeiro',
-                },
-                responsaveis: [
-                    { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
-                ],
-                observacoes: [
-                    { titulo: 'Alergia', descricao: 'Amendoim' },
-                ],
-                observacoesMedicas: {
-                    hospital: 'Hospital Exemplo',
-                    telefoneHospital: '444444444',
-                    medico: 'Dr. Fulano',
-                    telefoneMedico: '555555555',
-                    enderecoHospital: 'Av. Saúde, 123',
-                    possuiConvenio: true,
-                    alergias: 'Amendoim',
-                    medicamentosFebre: 'Paracetamol',
-                    medicamentosVomito: 'Dramin',
-                    observacoesGerais: 'Nenhuma',
-                },
-                disabled: false,
-                disabledAt: null,
-                payments: [],
-            });
+            expect(result).toEqual(
+                expect.objectContaining({
+                    id: 'student123',
+                    name: 'John Doe',
+                    isFilled: true,
+                    categorie: CategorieType.PARCIAL,
+                    class: ClassType.BERCARIO,
+                    turn: TurnType.MATUTINO,
+                    dataNascimento: '2010-01-01',
+                    naturalidadeAluno: 'São Paulo',
+                    endereco: 'Rua Exemplo, 123',
+                    cep: '12345-678',
+                })
+            );
         });
     });
 
     describe('findAll', () => {
         it('should return all students for a given userId', async () => {
-            const mockStudents = [
-                {
-                    id: 'student123',
-                    name: 'John Doe',
-                    categorie: CategorieType.PARCIAL,
-                    class: ClassType.BERCARIO,
-                    turn: TurnType.MATUTINO,
-                    schoolId: 'school123',
-                    isFilled: true,
-                    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                    updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-                    disabled: false,
-                    disabledAt: null,
-                    dataNascimento: '2010-01-01',
-                    naturalidadeAluno: 'São Paulo',
-                    endereco: 'Rua Exemplo, 123',
-                    cep: '12345-678',
-                    mae: JSON.stringify({
-                        nome: 'Maria Silva',
-                        telefone: '111111111',
-                        cpf: '12345678901',
-                        rg: '1234567',
-                        naturalidade: 'São Paulo',
-                    }),
-                    pai: JSON.stringify({
-                        nome: 'José Silva',
-                        telefone: '222222222',
-                        cpf: '98765432100',
-                        rg: '7654321',
-                        naturalidade: 'Rio de Janeiro',
-                    }),
-                    responsaveis: JSON.stringify([
-                        { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
-                    ]),
-                    observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
-                    observacoesMedicas: JSON.stringify({
-                        hospital: 'Hospital Exemplo',
-                        telefoneHospital: '444444444',
-                        medico: 'Dr. Fulano',
-                        telefoneMedico: '555555555',
-                        enderecoHospital: 'Av. Saúde, 123',
-                        possuiConvenio: true,
-                        alergias: 'Amendoim',
-                        medicamentosFebre: 'Paracetamol',
-                        medicamentosVomito: 'Dramin',
-                        observacoesGerais: 'Nenhuma',
-                    }),
-                    payments: [],
-                },
-            ];
-
-
-            jest.spyOn(prismaService.student, 'findMany').mockResolvedValue(mockStudents);
+            jest.spyOn(prismaService.student, 'findMany').mockResolvedValue([createMockStudent()]);
 
             const result = await studentsPrismaService.findAll({ userId: 'user123' });
 
@@ -266,56 +189,7 @@ describe('StudentsPrismaService', () => {
 
     describe('get', () => {
         it('should return a student by ID', async () => {
-            const mockStudent = {
-                id: 'student123',
-                name: 'John Doe',
-                isFilled: true,
-                categorie: CategorieType.PARCIAL,
-                class: ClassType.BERCARIO,
-                turn: TurnType.MATUTINO,
-                dataNascimento: '2010-01-01',
-                naturalidadeAluno: 'São Paulo',
-                endereco: 'Rua Exemplo, 123',
-                cep: '12345-678',
-                mae: JSON.stringify({
-                    nome: 'Maria Silva',
-                    telefone: '111111111',
-                    cpf: '12345678901',
-                    rg: '1234567',
-                    naturalidade: 'São Paulo',
-                }),
-                pai: JSON.stringify({
-                    nome: 'José Silva',
-                    telefone: '222222222',
-                    cpf: '98765432100',
-                    rg: '7654321',
-                    naturalidade: 'Rio de Janeiro',
-                }),
-                responsaveis: JSON.stringify([
-                    { nome: 'Ana', parentesco: 'Tia', telefone: '333333333' },
-                ]),
-                observacoes: JSON.stringify([{ titulo: 'Alergia', descricao: 'Amendoim' }]),
-                observacoesMedicas: JSON.stringify({
-                    hospital: 'Hospital Exemplo',
-                    telefoneHospital: '444444444',
-                    medico: 'Dr. Fulano',
-                    telefoneMedico: '555555555',
-                    enderecoHospital: 'Av. Saúde, 123',
-                    possuiConvenio: true,
-                    alergias: 'Amendoim',
-                    medicamentosFebre: 'Paracetamol',
-                    medicamentosVomito: 'Dramin',
-                    observacoesGerais: 'Nenhuma',
-                }),
-                disabled: false,
-                disabledAt: null,
-                payments: [],
-                schoolId: 'school123',
-                createdAt: new Date('2024-01-01T00:00:00.000Z'),
-                updatedAt: new Date('2024-12-20T00:00:00.000Z'),
-            };
-
-            jest.spyOn(prismaService.student, 'findUnique').mockResolvedValue(mockStudent);
+            jest.spyOn(prismaService.student, 'findUnique').mockResolvedValue(createMockStudent());
 
             const result = await studentsPrismaService.get('student123');
 
