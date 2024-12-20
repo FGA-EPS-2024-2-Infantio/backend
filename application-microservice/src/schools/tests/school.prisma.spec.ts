@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateSchoolDto } from '../dtos/CreateSchool.dto';
-import { SchoolResponseDto } from '../dtos/SchoolResponse.dto';
 import { SchoolsPrismaService } from '../school.prisma';
 import { CategorieType, ClassType, TurnType } from '@prisma/client';
 

@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { MonthlyPaymentPrismaService } from '../monthlyPayment.prisma';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateMonthlyPaymentDto } from '../dtos/CreateMonthlyPayment.dto';
-import { MonthlyPaymentResponseDto } from '../dtos/MonthlyPayment.dto';
 
 describe('MonthlyPaymentPrismaService', () => {
     let monthlyPaymentPrismaService: MonthlyPaymentPrismaService;

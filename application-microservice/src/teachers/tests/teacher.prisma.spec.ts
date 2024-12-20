@@ -1,8 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { TeachersPrismaService } from '../teacher.prisma';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateTeacherDto } from '../dtos/CreateTeacher.dto';
-import { TeacherResponseDto } from '../dtos/TeacherResponse.dto';
 
 describe('TeachersPrismaService', () => {
     let teachersPrismaService: TeachersPrismaService;

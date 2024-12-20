@@ -2,7 +2,6 @@ import { Test } from '@nestjs/testing';
 import { ClassMicroserviceController } from '../class.controller';
 import { ClassesService } from '../class.service';
 import { CreateClassDto } from '../dtos/CreateClass.dto';
-import { ClassResponseDto } from '../dtos/ClassResponse.dto';
 
 describe('ClassMicroserviceController', () => {
     let classController: ClassMicroserviceController;

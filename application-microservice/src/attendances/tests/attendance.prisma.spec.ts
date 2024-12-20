@@ -3,7 +3,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AttendancePrismaService } from '../attendance.prisma';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateAttendanceDto } from '../dtos/CreateAttendance.dto';
-import { AttendanceResponseDto } from '../dtos/AttendanceResponse.dto';
 
 describe('AttendancePrismaService', () => {
     let attendancePrismaService: AttendancePrismaService;
