@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Res } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { CreateMonthlyPaymentDto } from './dtos/CreateMonthlyPayment.dto';
+import { Response } from 'express';
+import { firstValueFrom } from 'rxjs';
 
 @ApiTags('Mensalidades')
 @Controller('monthlyPayment')
@@ -55,5 +57,21 @@ export class MonthlyPaymentController {
   @ApiResponse({ status: 404, description: 'Pagamento mensal não encontrado.' })
   async disableMonthlyPayment(@Param('monthlyPaymentId') monthlyPaymentId: string) {
     return await this.natsClient.send('disableMonthlyPayment', monthlyPaymentId);
+  }
+
+  @Get('download/:studentId')
+  @ApiOperation({ summary: 'Download de mensalidades de um estudante em formato CSV' })
+  @ApiParam({ name: 'studentId', description: 'ID do estudante' })
+  @ApiResponse({ status: 200, description: 'Arquivo CSV gerado com sucesso.' })
+  async downloadMonthlyPaymentsByStudent(
+    @Param('studentId') studentId: string,
+    @Res() res: Response
+  ) {
+    const csvData = await firstValueFrom(
+      this.natsClient.send<string>('downloadMonthlyPaymentsByStudent', studentId)
+    );
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', `attachment; filename=historico_de_mensalidades.csv`);
+    res.send(csvData);
   }
 }

@@ -31,4 +31,8 @@ export class MonthlyPaymentService {
   async disable(monthlyPaymentId: string) {
     return await this.monthlyPaymentPrismaService.disable(monthlyPaymentId);
   }
+
+  async findByStudentId(studentId: string): Promise<MonthlyPaymentResponseDto[]> {
+    return await this.monthlyPaymentPrismaService.findByStudentId(studentId);
+  }
 }
