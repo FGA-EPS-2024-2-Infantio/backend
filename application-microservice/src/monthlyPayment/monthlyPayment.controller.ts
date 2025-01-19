@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateMonthlyPaymentDto } from './dtos/CreateMonthlyPayment.dto';
 import { MonthlyPaymentResponseDto } from './dtos/MonthlyPayment.dto';
 import { MonthlyPaymentService } from './monthlyPayment.service';
+import { createObjectCsvStringifier } from 'csv-writer';
 
 @Controller()
 export class MonthlyPaymentMicroserviceController {
@@ -56,5 +57,33 @@ export class MonthlyPaymentMicroserviceController {
       message: 'Payment deleted successfully',
       data: payment,
     };
+  }
+
+  @MessagePattern('downloadMonthlyPaymentsByStudent')
+  async downloadByStudent(studentId: string) {
+    const monthlyPayments = await this.monthlyPaymentService.findByStudentId(studentId);
+
+    if (monthlyPayments.length === 0) {
+      return '';
+    }
+
+    const formattedData = monthlyPayments.map(payment => ({
+      dataReferencia: `${String(payment.month).padStart(2, '0')}/${payment.year}`,
+      valor: `R$ ${payment.value.toFixed(2).replace('.', ',')}`,
+      pago: payment.payed == true ? "Sim" : "Não" 
+    }));
+
+    const csvStringifier = createObjectCsvStringifier({
+      header: [
+        { id: 'dataReferencia', title: 'Data de referência' },
+        { id: 'valor', title: 'Valor' },
+        { id: 'pago', title: 'Pago' },
+      ],
+    });
+
+    const csvContent =
+      csvStringifier.getHeaderString() + csvStringifier.stringifyRecords(formattedData);
+
+    return csvContent;
   }
 }

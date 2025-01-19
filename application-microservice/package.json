@@ -18,9 +18,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:migrate": "sudo docker-compose exec application_microservice yarn prisma migrate dev",
-    "docker:reset": "sudo docker-compose exec application_microservice yarn prisma migrate reset",
-    "docker:studio": "sudo docker-compose exec application_microservice yarn prisma studio --port 5556",
+    "docker:migrate": "docker-compose exec users_microservice yarn prisma migrate dev",
+    "docker:reset": "docker-compose exec users_microservice yarn prisma migrate reset",
+    "docker:studio": "docker-compose exec users_microservice yarn prisma studio --port 5556",
     "db:seed-school": "ts-node --transpile-only prisma/seed/seedSchool.ts"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "@prisma/client": "^5.21.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "csv-writer": "^1.6.0",
     "nats": "^2.28.2",
     "prisma": "^5.21.1",
     "reflect-metadata": "^0.2.0",

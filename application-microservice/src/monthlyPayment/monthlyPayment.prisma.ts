@@ -46,4 +46,16 @@ export class MonthlyPaymentPrismaService {
       },
     });
   }
+
+  async findByStudentId(studentId: string): Promise<MonthlyPaymentResponseDto[]> {
+    return await this.prisma.monthlyPayment.findMany({
+      where: {
+        studentId: studentId
+      },
+      orderBy: [
+        { year: 'asc' },
+        { month: 'asc' }
+      ],
+    });
+  }
 }
