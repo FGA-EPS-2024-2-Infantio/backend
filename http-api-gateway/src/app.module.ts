@@ -8,6 +8,7 @@ import { SchoolModule } from './schools/school.module';
 import { StudentModule } from './students/student.module';
 import { TeacherModule } from './teachers/teacher.module';
 import { UserModule } from './users/user.module';
+import { TicketModule } from './ticket/ticket.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserModule } from './users/user.module';
     UserModule,
     AttendanceModule,
     MonthlyPaymentModule,
+    TicketModule
   ],
   controllers: [],
   providers: [],
