@@ -134,3 +134,24 @@ model MonthlyPayment {
   createdAt  DateTime      @default(now()) @map("created_at")
   updatedAt  DateTime      @updatedAt @map("updated_at")
 }
+
+model Ticket {
+  id             String   @id @default(cuid())
+  title          String
+  message        String
+  response       String?  
+  status         Status  @default(OPEN)  
+  directorId     String  
+  directorName   String  
+  adminId        String? 
+  
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@map("ticket")
+}
+
+enum Status {
+  OPEN
+  CLOSED
+}

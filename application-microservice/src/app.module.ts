@@ -5,6 +5,7 @@ import { MonthlyPaymentModule } from './monthlyPayment/monthlyPayment.module';
 import { SchoolsModule } from './schools/school.module';
 import { StudentsModule } from './students/student.module';
 import { TeachersModule } from './teachers/teacher.module';
+import { TicketModule } from './ticket/ticket.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { TeachersModule } from './teachers/teacher.module';
     ClassModule,
     AttendanceModule,
     MonthlyPaymentModule,
+    TicketModule
   ],
   controllers: [],
   providers: [],
