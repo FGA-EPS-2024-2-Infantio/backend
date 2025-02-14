@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsDate, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsString, IsDate, IsBoolean, IsOptional } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -23,4 +23,16 @@ export class CreateAttendanceDto {
   @Type(() => Date)
   @IsDate()
   date: Date;
+
+  @ApiProperty({ description: 'Horário de entrada', example: '2024-12-01T08:00:00Z', required: false })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  entryTime?: Date;
+
+  @ApiProperty({ description: 'Horário de saída', example: '2024-12-01T17:00:00Z', required: false })
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  exitTime?: Date;
 }

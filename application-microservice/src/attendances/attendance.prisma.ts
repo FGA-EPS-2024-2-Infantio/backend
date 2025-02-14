@@ -6,7 +6,7 @@ import { AttendanceResponseDto } from './dtos/AttendanceResponse.dto';
 
 @Injectable()
 export class AttendancePrismaService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async createAttendance(data: CreateAttendanceDto) {
     return await this.prisma.attendance.create({ data });
@@ -26,6 +26,8 @@ export class AttendancePrismaService {
         date: true,
         classId: true,
         hasAttended: true,
+        entryTime: true,
+        exitTime: true,
       },
     });
   }
@@ -43,6 +45,8 @@ export class AttendancePrismaService {
         date: true,
         classId: true,
         hasAttended: true,
+        entryTime: true,
+        exitTime: true,
       },
     });
   }
@@ -62,6 +66,8 @@ export class AttendancePrismaService {
         date: true,
         classId: true,
         hasAttended: true,
+        entryTime: true,
+        exitTime: true,
       },
     });
   }
@@ -77,6 +83,8 @@ export class AttendancePrismaService {
         date: true,
         classId: true,
         hasAttended: true,
+        entryTime: true,
+        exitTime: true,
       },
     });
   }
@@ -109,6 +117,8 @@ export class AttendancePrismaService {
         },
         data: {
           hasAttended: attendance.hasAttended,
+          entryTime: attendance.entryTime,
+          exitTime: attendance.exitTime,
         },
       }),
     );

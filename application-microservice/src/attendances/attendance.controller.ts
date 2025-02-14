@@ -11,7 +11,7 @@ export class AttendanceMicroserviceController {
     @Inject('NATS_SERVICE') private readonly natsClients: ClientProxy,
     private prisma: PrismaService,
     private readonly attendanceService: AttendanceService,
-  ) { }
+  ) {}
   @MessagePattern('createAttendance')
   async createAttendance(
     @Payload() createAttendanceDto: CreateAttendanceDto[],

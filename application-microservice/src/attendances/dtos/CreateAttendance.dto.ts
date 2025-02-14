@@ -3,4 +3,6 @@ export class CreateAttendanceDto {
   classId: string;
   date: Date;
   hasAttended: boolean;
+  entryTime?: Date;
+  exitTime?: Date;
 }

@@ -28,7 +28,7 @@ export class AttendanceController {
   @ApiResponse({ status: 200, description: 'Lista de presenças retornada com sucesso.' })
   async listAttendance() {
     try {
-      const response = this.natsClient.send('listAttendance', {});
+      const response = await lastValueFrom(this.natsClient.send('listAttendance', {}));
       return response;
     } catch (ex) {
       console.error(ex);
@@ -42,7 +42,7 @@ export class AttendanceController {
   @ApiResponse({ status: 200, description: 'Lista de presenças da turma.' })
   async getAttendanceByClass(@Param('classId') classId: string) {
     try {
-      const response = this.natsClient.send('listAttendanceByClassId', classId);
+      const response = await lastValueFrom(this.natsClient.send('listAttendanceByClassId', classId));
       return response;
     } catch (ex) {
       console.error(ex);
@@ -56,7 +56,7 @@ export class AttendanceController {
   @ApiResponse({ status: 200, description: 'Lista de presenças do aluno.' })
   async getAttendanceByStudent(@Param('studentId') studentId: string) {
     try {
-      const response = this.natsClient.send('listAttendanceByStudentId', studentId);
+      const response = await lastValueFrom(this.natsClient.send('listAttendanceByStudentId', studentId));
       return response;
     } catch (ex) {
       console.error(ex);
@@ -71,7 +71,7 @@ export class AttendanceController {
   @ApiResponse({ status: 200, description: 'Lista de presenças para a data e turma especificadas.' })
   async getAttendanceByDate(@Param('date') date: string, @Param('classId') classId: string) {
     try {
-      const response = this.natsClient.send('listAttendanceByDate', { date, classId });
+      const response = await lastValueFrom(this.natsClient.send('listAttendanceByDate', { date, classId }));
       return response;
     } catch (ex) {
       console.error(ex);
@@ -85,7 +85,7 @@ export class AttendanceController {
   @ApiResponse({ status: 200, description: 'Presença retornada com sucesso.' })
   async getAttendanceById(@Param('attendanceId') attendanceId: string) {
     try {
-      const response = this.natsClient.send('getAttendanceById', attendanceId);
+      const response = await lastValueFrom(this.natsClient.send('getAttendanceById', attendanceId));
       return response;
     } catch (ex) {
       console.error(ex);
@@ -103,10 +103,12 @@ export class AttendanceController {
     @Body() updateAttendanceDto: CreateAttendanceDto,
   ) {
     try {
-      const response = this.natsClient.emit('updateAttendance', {
-        data: updateAttendanceDto,
-        attendanceId: attendanceId,
-      });
+      const response = await lastValueFrom(
+        this.natsClient.send('updateAttendance', {
+          data: updateAttendanceDto,
+          attendanceId: attendanceId,
+        }),
+      );
       return response;
     } catch (ex) {
       console.error(ex);
@@ -120,7 +122,7 @@ export class AttendanceController {
   @ApiResponse({ status: 200, description: 'Lista de presenças atualizada com sucesso.' })
   async updateAttendanceList(@Body() updateAttendanceDto: CreateAttendanceDto[]) {
     try {
-      const response = await this.natsClient.emit('updateList', { attendanceList: updateAttendanceDto });
+      const response = await lastValueFrom(this.natsClient.send('updateList', { attendanceList: updateAttendanceDto }));
       return response;
     } catch (ex) {
       console.error(ex);

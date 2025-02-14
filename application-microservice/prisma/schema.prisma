@@ -78,6 +78,8 @@ model Attendance {
   classId     String   @map("class_id")
   date        DateTime @db.Date
   hasAttended Boolean  @map("has_attended")
+  entryTime   DateTime? @map("entry_time")
+  exitTime    DateTime? @map("exit_time")
 
   class   Class   @relation(fields: [classId], references: [id])
   student Student @relation(fields: [studentId], references: [id])
